@@ -1,6 +1,7 @@
 package org.kimtaehoondev.jobpostingcollector.jobposting.community;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import org.kimtaehoondev.jobpostingcollector.jobposting.JobPosting;
 import org.kimtaehoondev.jobpostingcollector.utils.UrlParser;
@@ -34,6 +35,35 @@ public class RocketPunchCommunity implements JobPostingCommunity {
 
     @Override
     public JobPosting makeJobPostingFrom(WebElement element) {
-        return null;
+        JobPosting.JobPostingBuilder builder = JobPosting.builder();
+
+        String companyName =
+            element.findElement(By.cssSelector(".company-name a")).getText().trim();
+        builder.companyName(companyName);
+
+        String occupation =
+            element.findElement(By.cssSelector(".company-jobs-detail .job-name")).getText().trim();
+        builder.occupation(occupation);
+
+        String linkString = element.findElement(By.cssSelector(".company-jobs-detail .job-name a"))
+            .getAttribute("href");
+        builder.link(UrlParser.parse(linkString));
+
+        List<String> infos = makeInfos(element);
+        builder.infos(infos);
+
+        return builder.build();
+    }
+
+    private List<String> makeInfos(WebElement element) {
+        List<String> infos = new ArrayList<>();
+
+        element.findElements(By.cssSelector(".job-badges .reward-banner span")).stream()
+            .map(each -> each.getText().trim())
+            .forEach(infos::add);
+        element.findElements(By.cssSelector(".job-badges .label div")).stream()
+            .map(each -> each.getText().trim())
+            .forEach(infos::add);
+        return infos;
     }
 }

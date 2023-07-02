@@ -28,13 +28,12 @@ public class JobPostingResolver {
         }
         String url = community.getUrl();
         driver.get(url);
-        // TODO 대기
         try {
+            // TODO 대기 방식 가능하면 명시적으로 변경
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             throw new RuntimeException(community.getUrl() + "시간초과입니다");
         }
-        System.out.println("driver.getTitle = " + driver.getTitle());
         List<WebElement> elements = community.scrap(driver);
         return elements.stream()
             .map(community::makeJobPostingFrom)
