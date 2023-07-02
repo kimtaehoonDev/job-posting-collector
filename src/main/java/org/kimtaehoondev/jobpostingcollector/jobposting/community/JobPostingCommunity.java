@@ -15,6 +15,10 @@ public interface JobPostingCommunity {
      */
     boolean isConnected();
 
+    default void process(WebDriver driver) {
+
+    }
+
     List<WebElement> getJobPostingElements(WebDriver driver);
 
     JobPosting makeJobPostingFrom(WebElement element);
@@ -26,6 +30,7 @@ public interface JobPostingCommunity {
         String url = getUrl();
         driver.get(url);
         wait(url, 1000);
+        process(driver);
         List<WebElement> elements = getJobPostingElements(driver);
         return elements.stream()
             .map(this::makeJobPostingFrom)
