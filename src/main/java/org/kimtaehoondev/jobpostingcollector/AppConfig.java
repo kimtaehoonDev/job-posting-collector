@@ -16,6 +16,7 @@ public class AppConfig {
         options.addArguments("--lang=ko");
         options.addArguments("--disable-gpu");
         options.addArguments("--remote-allow-origins=*");
+        options.addArguments("user-agent=Mozilla/5.0");
 
         return new ChromeDriver(options);
     }
