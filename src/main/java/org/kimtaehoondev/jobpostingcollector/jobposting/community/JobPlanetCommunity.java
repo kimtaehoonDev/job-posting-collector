@@ -2,6 +2,7 @@ package org.kimtaehoondev.jobpostingcollector.jobposting.community;
 
 import java.net.URL;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 import org.kimtaehoondev.jobpostingcollector.jobposting.JobPosting;
 import org.kimtaehoondev.jobpostingcollector.utils.UrlParser;
@@ -37,6 +38,42 @@ public class JobPlanetCommunity implements JobPostingCommunity {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public List<WebElement> getJobPostingElements(WebDriver driver) {
+        return driver.findElements(By.cssSelector(".recruitment-content .item-list .item-card"));
+    }
+
+    @Override
+    public JobPosting makeJobPostingFrom(WebElement element) {
+        JobPosting.JobPostingBuilder builder = JobPosting.builder();
+
+        String linkString = element.findElement(By.tagName("a")).getAttribute("href");
+        builder.link(UrlParser.parse(linkString));
+
+        List<WebElement> jobPostingInfoElements =
+            element.findElements(By.cssSelector(".item-card__information div"));
+
+        List<String> infos = new ArrayList<>();
+        for (WebElement each : jobPostingInfoElements) {
+            String classValue = each.getAttribute("class");
+            if (classValue.contains("item-card__title")) {
+                builder.occupation(each.getText());
+                continue;
+            }
+            if (classValue.contains("item-card__company")) {
+                WebElement companyNameElement =
+                    element.findElement(By.className("item-card__name"));
+                builder.companyName(companyNameElement.getText());
+                continue;
+            }
+            if (!each.getText().isBlank()) {
+                infos.add(each.getText());
+            }
+        }
+        builder.infos(infos);
+        return builder.build();
     }
 
     private void applyReviewScoreFilter(WebDriver driver) throws InterruptedException {
@@ -97,16 +134,6 @@ public class JobPlanetCommunity implements JobPostingCommunity {
 
         Thread.sleep(1000);// TODO 가능하면 명시적으로 변경
 
-    }
-
-    @Override
-    public List<WebElement> getJobPostingElements(WebDriver driver) {
-        return driver.findElements(By.cssSelector(".recruitment-content .item-list .item-card"));
-    }
-
-    @Override
-    public JobPosting makeJobPostingFrom(WebElement element) {
-        return null;
     }
 
     private void applyOccupationFilter(WebDriver driver) throws InterruptedException {
