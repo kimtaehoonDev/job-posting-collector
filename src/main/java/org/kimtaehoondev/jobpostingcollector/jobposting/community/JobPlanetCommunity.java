@@ -33,9 +33,42 @@ public class JobPlanetCommunity implements JobPostingCommunity {
         try {
             applyOccupationFilter(driver);
             applyYearsOfExperienceFilter(driver);
+            applyReviewScoreFilter(driver);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void applyReviewScoreFilter(WebDriver driver) throws InterruptedException {
+        WebElement filterOpenBtn = driver.findElement(
+            By.cssSelector("#review_score_filter .filter_item .btn_filter button"));
+        filterOpenBtn.click();
+
+        List<WebElement> handles = driver.findElements(
+            By.cssSelector("#sliderFilter_review_score .ui-slider-handle"));
+        WebElement startHandle = handles.get(0);
+        WebElement endHandle = handles.get(1);
+
+        int startX = startHandle.getLocation().getX();
+        int endX = endHandle.getLocation().getX();
+        int targetX = 3 * (endX - startX) / 5;
+        Actions action = new Actions(driver);
+        action.moveToElement(startHandle)
+            .clickAndHold()
+            .moveByOffset(targetX, 0)
+            .release()
+            .build().perform();
+
+        // 적용 버튼 누르기
+        WebElement applyBtn =
+            driver.findElements(By.cssSelector("#review_score_filter .panel_bottom button"))
+                .stream().filter(btn -> btn.getText().trim().equals("적용"))
+                .findAny()
+                .orElseThrow(() -> new RuntimeException("HTML 구조를 잘못 매핑했습니다"));
+        applyBtn.click();
+
+        Thread.sleep(1000);// TODO 가능하면 명시적으로 변경
+
     }
 
     private void applyYearsOfExperienceFilter(WebDriver driver) throws InterruptedException {
