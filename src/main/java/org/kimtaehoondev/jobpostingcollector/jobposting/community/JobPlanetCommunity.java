@@ -8,6 +8,7 @@ import org.kimtaehoondev.jobpostingcollector.utils.UrlParser;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.stereotype.Component;
@@ -31,10 +32,38 @@ public class JobPlanetCommunity implements JobPostingCommunity {
     public void process(WebDriver driver) {
         try {
             applyOccupationFilter(driver);
-
+            applyYearsOfExperienceFilter(driver);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void applyYearsOfExperienceFilter(WebDriver driver) throws InterruptedException {
+        WebElement filterOpenBtn = driver.findElement(
+            By.cssSelector("#years_of_experience_filter .filter_item .btn_filter button"));
+        filterOpenBtn.click();
+
+        List<WebElement> handles = driver.findElements(
+            By.cssSelector("#sliderFilter_years_of_experience .ui-slider-handle"));
+        WebElement startHandle = handles.get(0);
+        WebElement endHandle = handles.get(1);
+
+        Actions action = new Actions(driver);
+        action.moveToElement(endHandle)
+            .clickAndHold()
+            .moveToElement(startHandle)
+            .release()
+            .build().perform();
+
+        WebElement applyBtn =
+            driver.findElements(By.cssSelector("#years_of_experience_filter .panel_bottom button"))
+                .stream().filter(btn -> btn.getText().trim().equals("적용"))
+                .findAny()
+                .orElseThrow(() -> new RuntimeException("HTML 구조를 잘못 매핑했습니다"));
+        applyBtn.click();
+
+        Thread.sleep(1000);// TODO 가능하면 명시적으로 변경
+
     }
 
     @Override
@@ -53,7 +82,8 @@ public class JobPlanetCommunity implements JobPostingCommunity {
         filterOpenBtn.click();
 
         List<WebElement> depth1Btns =
-            driver.findElements(By.cssSelector(".filter_depth1_list .filter_depth1_item .filter_depth1_btn"));
+            driver.findElements(
+                By.cssSelector(".filter_depth1_list .filter_depth1_item .filter_depth1_btn"));
         for (WebElement depth1Btn : depth1Btns) {
             if (depth1Btn.getText().trim().equals("개발")) {
                 depth1Btn.click();
@@ -84,7 +114,6 @@ public class JobPlanetCommunity implements JobPostingCommunity {
                 .findAny()
                 .orElseThrow(() -> new RuntimeException("HTML 구조를 잘못 매핑했습니다"));
         applyBtn.click();
-
         Thread.sleep(1000);// TODO 가능하면 명시적으로 변경
     }
 
