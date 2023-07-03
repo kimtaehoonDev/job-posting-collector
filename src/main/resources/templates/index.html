@@ -4,8 +4,22 @@
 <head>
     <meta charset="UTF-8">
     <title>채용공고 모음</title>
+    <link rel="stylesheet" href="/test.css">
 </head>
 <body>
-<h1>Hello!</h1>
+<div class="container">
+    <h1>Hello!(new에 대해 정보 추가하기)</h1>
+    <div class="job-posting" th:each="posting: ${postings}">
+        <div class="job-posting-identifier">
+            <a th:href="${posting.link}" target="_blank">
+                <div class="occupation"><span th:text="${posting.occupation}"></span></div>
+                <div class="company">회사: <span th:text="${posting.companyName}"></span></div>
+            </a>
+        </div>
+        <div class="job-posting-info" th:text="${posting.infos}">추가정보</div>
+    </div>
+</div>
+
+</div>
 </body>
 </html>

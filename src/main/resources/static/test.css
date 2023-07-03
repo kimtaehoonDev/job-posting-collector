@@ -1,0 +1,36 @@
+/* 공통 부분 */
+* {
+    font-family: 'Noto Sans KR', sans-serif;
+    list-style: none;
+    text-decoration: none;
+    border-collapse: collapse;
+    margin: 0px;
+    padding: 0px;
+    color: #000;
+}
+
+.container {
+    width: 840px;
+    margin: 0 auto;
+}
+.job-posting {
+    display: flex;
+    margin-bottom: 5px;
+
+    border-bottom: 1px solid black; /* 수평선 스타일 지정 */
+}
+.job-posting-identifier {
+    flex: 4;
+    border-right: 1px solid black;
+    margin-right: 5px;
+}
+.occupation {
+    font-size: 18px;
+}
+.company {
+    font-size: 14px;
+}
+.job-posting-info {
+    flex: 5;
+    margin-left: 5px;
+}
