@@ -12,6 +12,8 @@ import org.openqa.selenium.WebElement;
 public interface JobPostingCommunity {
     String getUrl();
 
+    void changeStatus(Status status);
+
     // TODO
     /**
      * 미리 요청을 보내본 뒤, 서버가 연결가능한지 확인한다
@@ -59,4 +61,9 @@ public interface JobPostingCommunity {
         }
     }
 
+    boolean isStatusBad();
+
+    enum Status {
+        GOOD, BAD;
+    }
 }

@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class JobPlanetCommunity implements JobPostingCommunity {
     private final URL url = UrlParser.parse("https://www.jobplanet.co.kr/job");
+    private Status status = Status.GOOD;
 
     @Override
     public String getUrl() {
@@ -25,9 +26,19 @@ public class JobPlanetCommunity implements JobPostingCommunity {
     }
 
     @Override
+    public void changeStatus(Status status) {
+        this.status = status;
+    }
+
+    @Override
     public boolean isConnected() {
         // TODO
         return true;
+    }
+
+    @Override
+    public boolean isStatusBad() {
+        return Status.BAD == status;
     }
 
     @Override

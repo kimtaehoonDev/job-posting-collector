@@ -20,6 +20,7 @@ import org.springframework.stereotype.Component;
 public class WantedCommunity implements JobPostingCommunity {
     private final URL url = UrlParser.parse(
         "https://www.wanted.co.kr/wdlist/518/872?country=kr&job_sort=company.response_rate_order&years=0");
+    private Status status = Status.GOOD;
 
     @Override
     public String getUrl() {
@@ -27,9 +28,19 @@ public class WantedCommunity implements JobPostingCommunity {
     }
 
     @Override
+    public void changeStatus(Status status) {
+        this.status = status;
+    }
+
+    @Override
     public boolean isConnected() {
         // TODO
         return true;
+    }
+
+    @Override
+    public boolean isStatusBad() {
+        return Status.BAD == status;
     }
 
     @Override

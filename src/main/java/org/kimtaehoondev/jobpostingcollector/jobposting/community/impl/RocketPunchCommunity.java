@@ -16,6 +16,7 @@ public class RocketPunchCommunity implements JobPostingCommunity {
     // 필터링 조건: SW개발, JAVA, 신입, 인턴, 웹서비스
     private final URL url = UrlParser.parse(
         "https://www.rocketpunch.com/jobs?job=1&specialty=Java&career_type=1&career_type=4&tag=%EC%9B%B9%EC%84%9C%EB%B9%84%EC%8A%A4");
+    private Status status = Status.GOOD;
 
 
     @Override
@@ -24,9 +25,19 @@ public class RocketPunchCommunity implements JobPostingCommunity {
     }
 
     @Override
+    public void changeStatus(Status status) {
+        this.status = status;
+    }
+
+    @Override
     public boolean isConnected() {
         // TODO
         return true;
+    }
+
+    @Override
+    public boolean isStatusBad() {
+        return Status.BAD == status;
     }
 
     @Override
