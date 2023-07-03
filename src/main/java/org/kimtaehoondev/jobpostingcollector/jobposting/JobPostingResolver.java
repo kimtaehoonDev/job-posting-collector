@@ -1,5 +1,6 @@
 package org.kimtaehoondev.jobpostingcollector.jobposting;
 
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.kimtaehoondev.jobpostingcollector.jobposting.community.JobPostingCommunity;
@@ -15,9 +16,10 @@ public class JobPostingResolver {
     private final List<JobPostingCommunity> communities;
 
     void updateJobPosting() {
+        List<JobPosting> result = new ArrayList<>();
         for (JobPostingCommunity community : communities) {
-            List<JobPosting> result = community.scrap(driver);
-            repository.updateAll(result);
+            result.addAll(community.scrap(driver));
         }
+        repository.updateAll(result);
     }
 }
