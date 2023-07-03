@@ -61,6 +61,12 @@ public class JobPosting {
         return link.toString();
     }
 
+    public boolean isIncludeInfo(String info) {
+        return infos.stream()
+            .map(String::toLowerCase)
+            .anyMatch(each -> each.contains(info.toLowerCase()));
+    }
+
     @RequiredArgsConstructor
     @EqualsAndHashCode
     @ToString

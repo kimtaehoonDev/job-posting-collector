@@ -79,6 +79,14 @@ public class JobPlanetCommunity implements JobPostingCommunity {
         return builder.build();
     }
 
+    @Override
+    public boolean filter(JobPosting jobPosting) {
+        if (jobPosting.isIncludeInfo("spring") || jobPosting.isIncludeInfo("java")) {
+            return true;
+        }
+        return false;
+    }
+
     private void applyReviewScoreFilter(WebDriver driver) throws InterruptedException {
         WebElement filterOpenBtn = driver.findElement(
             By.cssSelector("#review_score_filter .filter_item .btn_filter button"));
