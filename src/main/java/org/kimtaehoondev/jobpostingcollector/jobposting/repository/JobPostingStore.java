@@ -5,4 +5,6 @@ import org.kimtaehoondev.jobpostingcollector.jobposting.JobPosting;
 
 public interface JobPostingStore {
     void updateAll(List<JobPosting> result);
+
+    List<JobPosting> findAll();
 }

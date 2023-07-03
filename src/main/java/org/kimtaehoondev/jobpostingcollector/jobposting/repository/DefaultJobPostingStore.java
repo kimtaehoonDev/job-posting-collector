@@ -3,6 +3,7 @@ package org.kimtaehoondev.jobpostingcollector.jobposting.repository;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import org.kimtaehoondev.jobpostingcollector.jobposting.JobPosting;
 import org.springframework.stereotype.Component;
 
@@ -29,5 +30,10 @@ public class DefaultJobPostingStore implements JobPostingStore {
                 store.remove(entry.getKey());
             }
         }
+    }
+
+    @Override
+    public List<JobPosting> findAll() {
+        return store.values().stream().collect(Collectors.toList());
     }
 }
