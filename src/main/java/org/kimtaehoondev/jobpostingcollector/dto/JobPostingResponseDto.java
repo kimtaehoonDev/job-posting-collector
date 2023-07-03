@@ -1,4 +1,4 @@
-package org.kimtaehoondev.jobpostingcollector.controller;
+package org.kimtaehoondev.jobpostingcollector.dto;
 
 import java.util.List;
 import java.util.StringJoiner;

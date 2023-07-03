@@ -3,7 +3,7 @@ package org.kimtaehoondev.jobpostingcollector.service;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.kimtaehoondev.jobpostingcollector.controller.JobPostingResponseDto;
+import org.kimtaehoondev.jobpostingcollector.dto.JobPostingResponseDto;
 import org.kimtaehoondev.jobpostingcollector.jobposting.repository.JobPostingStore;
 import org.springframework.stereotype.Service;
 
