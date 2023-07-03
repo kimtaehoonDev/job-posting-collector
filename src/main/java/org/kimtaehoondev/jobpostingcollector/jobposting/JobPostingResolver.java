@@ -1,9 +1,12 @@
 package org.kimtaehoondev.jobpostingcollector.jobposting;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.kimtaehoondev.jobpostingcollector.exception.impl.ConnectException;
+import org.kimtaehoondev.jobpostingcollector.exception.impl.HttpParsingException;
 import org.kimtaehoondev.jobpostingcollector.jobposting.community.JobPostingCommunity;
 import org.kimtaehoondev.jobpostingcollector.jobposting.repository.JobPostingStore;
 import org.openqa.selenium.WebDriver;
@@ -22,10 +25,19 @@ public class JobPostingResolver {
     }
 
     public void updateJobPosting() {
-        List<JobPosting> result = new ArrayList<>();
+        List<JobPosting> total = new ArrayList<>();
         for (JobPostingCommunity community : communities) {
-            result.addAll(community.scrap(driver));
+            List<JobPosting> postings = scrap(community);
+            total.addAll(postings);
         }
-        repository.updateAll(result);
+        repository.updateAll(total);
+    }
+
+    private List<JobPosting> scrap(JobPostingCommunity community) {
+        try {
+            return community.scrap(driver);
+        } catch (HttpParsingException | ConnectException e) {
+            return Collections.emptyList();
+        }
     }
 }
