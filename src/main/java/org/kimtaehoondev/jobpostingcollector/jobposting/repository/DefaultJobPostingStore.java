@@ -1,6 +1,7 @@
-package org.kimtaehoondev.jobpostingcollector.jobposting;
+package org.kimtaehoondev.jobpostingcollector.jobposting.repository;
 
 import java.util.List;
+import org.kimtaehoondev.jobpostingcollector.jobposting.JobPosting;
 import org.springframework.stereotype.Component;
 
 @Component

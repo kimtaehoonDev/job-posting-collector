@@ -1,9 +1,10 @@
-package org.kimtaehoondev.jobpostingcollector.jobposting.community;
+package org.kimtaehoondev.jobpostingcollector.jobposting.community.impl;
 
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import org.kimtaehoondev.jobpostingcollector.jobposting.JobPosting;
+import org.kimtaehoondev.jobpostingcollector.jobposting.community.JobPostingCommunity;
 import org.kimtaehoondev.jobpostingcollector.utils.UrlParser;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;

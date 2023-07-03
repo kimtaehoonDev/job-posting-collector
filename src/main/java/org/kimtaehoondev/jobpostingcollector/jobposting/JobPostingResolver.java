@@ -3,6 +3,7 @@ package org.kimtaehoondev.jobpostingcollector.jobposting;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.kimtaehoondev.jobpostingcollector.jobposting.community.JobPostingCommunity;
+import org.kimtaehoondev.jobpostingcollector.jobposting.repository.JobPostingStore;
 import org.openqa.selenium.WebDriver;
 import org.springframework.stereotype.Component;
 
