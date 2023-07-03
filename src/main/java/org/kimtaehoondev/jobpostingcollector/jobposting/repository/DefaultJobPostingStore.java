@@ -1,9 +1,9 @@
 package org.kimtaehoondev.jobpostingcollector.jobposting.repository;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import org.kimtaehoondev.jobpostingcollector.jobposting.JobPosting;
 import org.springframework.stereotype.Component;
 
@@ -34,6 +34,17 @@ public class DefaultJobPostingStore implements JobPostingStore {
 
     @Override
     public List<JobPosting> findAll() {
-        return store.values().stream().collect(Collectors.toList());
+        return new ArrayList<>(store.values());
+    }
+
+    @Override
+    public void updatePart(List<JobPosting> jobPostings) {
+        for (JobPosting jobPosting : jobPostings) {
+            JobPosting.Identifier identifier = jobPosting.getIdentifier();
+            if (store.containsKey(identifier)) {
+                jobPosting.makeRenewData();
+            }
+            store.put(identifier, jobPosting);
+        }
     }
 }

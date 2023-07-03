@@ -3,6 +3,7 @@ package org.kimtaehoondev.jobpostingcollector.jobposting;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.kimtaehoondev.jobpostingcollector.exception.impl.ConnectException;
@@ -35,9 +36,24 @@ public class JobPostingResolver {
 
     private List<JobPosting> scrap(JobPostingCommunity community) {
         try {
+            community.changeStatus(JobPostingCommunity.Status.GOOD);
             return community.scrap(driver);
         } catch (HttpParsingException | ConnectException e) {
+            community.changeStatus(JobPostingCommunity.Status.BAD);
             return Collections.emptyList();
         }
+    }
+
+    public void requestToBadStatusCommunity() {
+        List<JobPosting> total = new ArrayList<>();
+        List<JobPostingCommunity> badStatusCommunities = communities.stream()
+            .filter(JobPostingCommunity::isStatusBad)
+            .collect(Collectors.toList());
+
+        for (JobPostingCommunity community : badStatusCommunities) {
+            List<JobPosting> postings = scrap(community);
+            total.addAll(postings);
+        }
+        repository.updatePart(total);
     }
 }

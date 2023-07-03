@@ -11,7 +11,12 @@ public class JobPostingScheduler {
     private final JobPostingResolver resolver;
 
     @Scheduled(cron = "0 30 6 * * ?")
-    void updateJobPosting() {
+    void updateJobPostingRegularly() {
         resolver.updateJobPosting();
+    }
+
+    @Scheduled(cron = "0 30 * * * ?")
+    void updateMissingJobPosting() {
+        resolver.requestToBadStatusCommunity();
     }
 }
