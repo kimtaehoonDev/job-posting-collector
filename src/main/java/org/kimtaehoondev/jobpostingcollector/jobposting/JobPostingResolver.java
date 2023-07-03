@@ -15,7 +15,7 @@ public class JobPostingResolver {
     private final JobPostingStore repository;
     private final List<JobPostingCommunity> communities;
 
-    void updateJobPosting() {
+    public void updateJobPosting() {
         List<JobPosting> result = new ArrayList<>();
         for (JobPostingCommunity community : communities) {
             result.addAll(community.scrap(driver));
