@@ -34,7 +34,12 @@ public interface JobPostingCommunity {
         List<WebElement> elements = getJobPostingElements(driver);
         return elements.stream()
             .map(this::makeJobPostingFrom)
+            .filter(this::filter)
             .collect(Collectors.toList());
+    }
+
+    default boolean filter(JobPosting jobPosting) {
+        return true;
     }
 
     private void wait(String urlString, int millis) {
