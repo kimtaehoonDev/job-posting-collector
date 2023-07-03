@@ -14,12 +14,15 @@ public class JobPosting {
     @Getter
     private final Identifier identifier;
 
+    @Getter
     private final String occupation;
 
+    @Getter
     private final String companyName;
 
     private final URL link;
 
+    @Getter
     private final List<String> infos;
 
     private Status status;
@@ -48,6 +51,14 @@ public class JobPosting {
 
     public boolean isEnd() {
         return status == Status.END;
+    }
+
+    public boolean isNew() {
+        return status == Status.NEW;
+    }
+
+    public String getUrlString() {
+        return link.toString();
     }
 
     @RequiredArgsConstructor
