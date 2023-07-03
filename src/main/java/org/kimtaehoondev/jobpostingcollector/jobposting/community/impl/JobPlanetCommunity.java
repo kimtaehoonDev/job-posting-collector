@@ -58,7 +58,7 @@ public class JobPlanetCommunity implements JobPostingCommunity {
         builder.occupation(occupation.getText());
 
         WebElement company =
-            element.findElement(By.cssSelector(".item-card__information .item-card__company"));
+            element.findElement(By.cssSelector(".item-card__information .item-card__company .item-card__name"));
         builder.companyName(company.getText());
 
         List<String> infos = new ArrayList<>();
