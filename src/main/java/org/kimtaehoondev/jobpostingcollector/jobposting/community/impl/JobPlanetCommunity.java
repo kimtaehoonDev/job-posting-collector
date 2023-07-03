@@ -53,26 +53,28 @@ public class JobPlanetCommunity implements JobPostingCommunity {
         String linkString = element.findElement(By.tagName("a")).getAttribute("href");
         builder.link(UrlParser.parse(linkString));
 
-        List<WebElement> jobPostingInfoElements =
-            element.findElements(By.cssSelector(".item-card__information div"));
+        WebElement occupation =
+            element.findElement(By.cssSelector(".item-card__information .item-card__title"));
+        builder.occupation(occupation.getText());
+
+        WebElement company =
+            element.findElement(By.cssSelector(".item-card__information .item-card__company"));
+        builder.companyName(company.getText());
 
         List<String> infos = new ArrayList<>();
-        for (WebElement each : jobPostingInfoElements) {
-            String classValue = each.getAttribute("class");
-            if (classValue.contains("item-card__title")) {
-                builder.occupation(each.getText());
-                continue;
-            }
-            if (classValue.contains("item-card__company")) {
-                WebElement companyNameElement =
-                    element.findElement(By.className("item-card__name"));
-                builder.companyName(companyNameElement.getText());
-                continue;
-            }
-            if (!each.getText().isBlank()) {
-                infos.add(each.getText());
-            }
-        }
+
+        WebElement skill =
+            element.findElement(By.cssSelector(".item-card__information .item-card__skill"));
+        infos.add(skill.getText());
+
+        WebElement welfare =
+            element.findElement(By.cssSelector(".item-card__information .item-card__welfare"));
+        infos.add(welfare.getText());
+
+        WebElement reward =
+            element.findElement(By.cssSelector(".item-card__information .item-card__reward"));
+        infos.add(reward.getText());
+
         builder.infos(infos);
         return builder.build();
     }
