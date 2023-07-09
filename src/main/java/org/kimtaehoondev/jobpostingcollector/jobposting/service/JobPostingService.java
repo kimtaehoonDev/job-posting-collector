@@ -1,4 +1,4 @@
-package org.kimtaehoondev.jobpostingcollector.service;
+package org.kimtaehoondev.jobpostingcollector.jobposting.service;
 
 import java.util.List;
 import org.kimtaehoondev.jobpostingcollector.dto.JobPostingResponseDto;

@@ -2,7 +2,7 @@ package org.kimtaehoondev.jobpostingcollector;
 
 import lombok.RequiredArgsConstructor;
 import org.kimtaehoondev.jobpostingcollector.jobposting.JobPostingResolver;
-import org.kimtaehoondev.jobpostingcollector.service.JobPostingService;
+import org.kimtaehoondev.jobpostingcollector.jobposting.service.JobPostingService;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
