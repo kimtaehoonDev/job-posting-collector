@@ -15,7 +15,7 @@ public class JobPostingScheduler {
     @Scheduled(cron = "0 30 6 * * ?")
     void updateJobPostingRegularly() {
         resolver.updateJobPosting();
-        jobPostingService.sendResult();
+        jobPostingService.sendJobPostingUpdateToAll();
     }
 
     @Scheduled(cron = "0 */20 * * * ?")
