@@ -25,6 +25,7 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java
 	implementation 'org.seleniumhq.selenium:selenium-java:4.10.0'
 
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	compileOnly 'org.projectlombok:lombok'
