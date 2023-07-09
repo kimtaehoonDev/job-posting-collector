@@ -4,22 +4,42 @@ import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.StringJoiner;
+import javax.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.kimtaehoondev.jobpostingcollector.dto.EmailRegisterRequestDto;
+import org.kimtaehoondev.jobpostingcollector.dto.response.EmailResponseDto;
 import org.kimtaehoondev.jobpostingcollector.email.EmailSender;
+import org.kimtaehoondev.jobpostingcollector.email.repository.EmailRepository;
+import org.kimtaehoondev.jobpostingcollector.entity.Email;
 import org.kimtaehoondev.jobpostingcollector.jobposting.JobPosting;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 public class EmailServiceImpl implements EmailService {
+    private final EmailRepository emailRepository;
     private final EmailSender emailSender;
+
+    @PostConstruct
+    void po() {//TODO 삭제
+        emailRepository.save(Email.create("kimth9981@naver.com"));
+    }
+    @Override
+    public Long registerEmail(EmailRegisterRequestDto dto) {
+        Email saved = emailRepository.save(dto.toEntity());
+        return saved.getId();
+    }
 
     @Override
     public void sendJobPostingUpdateToAll(List<JobPosting> jobPostings) {
         String title = LocalDate.now() + "일자 채용 안내 - 김태훈";
         String message = makePrettierHtml(jobPostings);
-        emailSender.sendHtmlToAll(title, message);
+        List<EmailResponseDto> total = emailRepository.findAllBy();
+        for (EmailResponseDto emailResponseDto : total) {
+            emailSender.sendHtml(emailResponseDto.getEmail(), title, message);
+        }
     }
+
 
     private String makePrettierHtml(List<JobPosting> postings) {
         List<JobPosting> newPostings = new LinkedList<>();

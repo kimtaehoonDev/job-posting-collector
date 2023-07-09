@@ -11,7 +11,6 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
-import org.kimtaehoondev.jobpostingcollector.email.repository.EmailRepository;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -19,15 +18,8 @@ import org.springframework.stereotype.Component;
 public class EmailSender {
     private final EmailConfig emailConfig;
     private final Properties emailProperties;
-    private final EmailRepository emailRepository;
 
-    public void sendHtmlToAll(String title, String content) {
-        for (String email : emailRepository.findAll()) {
-            sendHtml(email, title, content);
-        }
-    }
-
-    private void sendHtml(String email, String title, String content) {
+    public void sendHtml(String email, String title, String content) {
         try {
             Session session = getSession();
             MimeMessage message = new MimeMessage(session);
