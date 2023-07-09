@@ -7,7 +7,6 @@ import java.util.StringJoiner;
 import lombok.RequiredArgsConstructor;
 import org.kimtaehoondev.jobpostingcollector.email.EmailSender;
 import org.kimtaehoondev.jobpostingcollector.jobposting.JobPosting;
-import org.kimtaehoondev.jobpostingcollector.jobposting.repository.JobPostingStore;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -19,7 +18,7 @@ public class EmailServiceImpl implements EmailService {
     public void sendJobPostingUpdateToAll(List<JobPosting> jobPostings) {
         String title = LocalDate.now() + "일자 채용 안내 - 김태훈";
         String message = makePrettierHtml(jobPostings);
-        emailSender.sendToAll(title, message);
+        emailSender.sendHtmlToAll(title, message);
     }
 
     private String makePrettierHtml(List<JobPosting> postings) {

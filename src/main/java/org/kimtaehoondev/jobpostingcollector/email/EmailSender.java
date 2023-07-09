@@ -1,6 +1,5 @@
 package org.kimtaehoondev.jobpostingcollector.email;
 
-
 import java.util.Properties;
 import javax.mail.Authenticator;
 import javax.mail.Message;
@@ -22,20 +21,20 @@ public class EmailSender {
     private final Properties emailProperties;
     private final EmailRepository emailRepository;
 
-    public void sendToAll(String title, String content) {
+    public void sendHtmlToAll(String title, String content) {
         for (String email : emailRepository.findAll()) {
-            send(email, title, content);
+            sendHtml(email, title, content);
         }
     }
 
-    private void send(String email, String title, String content) {
+    private void sendHtml(String email, String title, String content) {
         try {
             Session session = getSession();
             MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress(emailConfig.getUsername()));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
             message.setSubject(title);
-            message.setText(content, emailConfig.getEncType(), "html"); // HTML 내용
+            message.setText(content, emailConfig.getEncType(), "html");
 
             Transport.send(message);
         } catch (AddressException e) {
@@ -49,7 +48,8 @@ public class EmailSender {
         return Session.getDefaultInstance(emailProperties, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(emailConfig.getUsername(), emailConfig.getPassword());
+                return new PasswordAuthentication(emailConfig.getUsername(),
+                    emailConfig.getPassword());
             }
         });
     }
