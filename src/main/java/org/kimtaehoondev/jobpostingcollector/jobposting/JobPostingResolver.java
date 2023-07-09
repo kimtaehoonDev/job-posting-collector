@@ -34,17 +34,7 @@ public class JobPostingResolver {
         repository.updateAll(total);
     }
 
-    private List<JobPosting> scrap(JobPostingCommunity community) {
-        try {
-            community.changeStatus(JobPostingCommunity.Status.GOOD);
-            return community.scrap(driver);
-        } catch (HttpParsingException | ConnectException e) {
-            community.changeStatus(JobPostingCommunity.Status.BAD);
-            return Collections.emptyList();
-        }
-    }
-
-    public void requestToBadStatusCommunity() {
+    public void updateFromBadStatusCommunity() {
         List<JobPosting> total = new ArrayList<>();
         List<JobPostingCommunity> badStatusCommunities = communities.stream()
             .filter(JobPostingCommunity::isStatusBad)
@@ -55,5 +45,15 @@ public class JobPostingResolver {
             total.addAll(postings);
         }
         repository.updatePart(total);
+    }
+
+    private List<JobPosting> scrap(JobPostingCommunity community) {
+        try {
+            community.changeStatus(JobPostingCommunity.Status.GOOD);
+            return community.scrap(driver);
+        } catch (HttpParsingException | ConnectException e) {
+            community.changeStatus(JobPostingCommunity.Status.BAD);
+            return Collections.emptyList();
+        }
     }
 }

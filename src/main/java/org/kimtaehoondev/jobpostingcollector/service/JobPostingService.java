@@ -5,4 +5,6 @@ import org.kimtaehoondev.jobpostingcollector.dto.JobPostingResponseDto;
 
 public interface JobPostingService {
     List<JobPostingResponseDto> findAll();
+
+    void sendResult();
 }
