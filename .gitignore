@@ -1,3 +1,6 @@
+application.properties
+application.yml
+
 HELP.md
 .gradle
 build/
