@@ -7,6 +7,7 @@ import java.util.StringJoiner;
 import lombok.RequiredArgsConstructor;
 import org.kimtaehoondev.jobpostingcollector.email.EmailSender;
 import org.kimtaehoondev.jobpostingcollector.jobposting.JobPosting;
+import org.kimtaehoondev.jobpostingcollector.jobposting.repository.JobPostingStore;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -17,11 +18,11 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public void sendJobPostingUpdateToAll(List<JobPosting> jobPostings) {
         String title = LocalDate.now() + "일자 채용 안내 - 김태훈";
-        String message = makePrettier(jobPostings);
+        String message = makePrettierHtml(jobPostings);
         emailSender.sendToAll(title, message);
     }
 
-    private String makePrettier(List<JobPosting> postings) {
+    private String makePrettierHtml(List<JobPosting> postings) {
         List<JobPosting> newPostings = new LinkedList<>();
         List<JobPosting> oldPostings = new LinkedList<>();
 
@@ -34,24 +35,27 @@ public class EmailServiceImpl implements EmailService {
         }
 
         StringJoiner sj = new StringJoiner("\n");
-        sj.add("NEW");
+        sj.add("<h1>" + LocalDate.now() + "</h1>");
+        sj.add("<h2>NEW</h2>");
         for (JobPosting posting : newPostings) {
-            sj.add(makePrettier(posting));
+            sj.add("<div>" + makePrettierHtml(posting)+ "</div>");
         }
-        sj.add("PREV");
+        sj.add("<h2>PREV</h2>");
         for (JobPosting posting : oldPostings) {
-            sj.add(makePrettier(posting));
+            sj.add("<div>" + makePrettierHtml(posting)+ "</div>");
         }
         return sj.toString();
     }
 
-    private String makePrettier(JobPosting posting) {
+    private String makePrettierHtml(JobPosting posting) {
         StringJoiner sj = new StringJoiner("\n");
-        sj.add("직종: " + posting.getOccupation());
-        sj.add("회사명: " + posting.getCompanyName());
-        sj.add("링크: " + posting.getUrlString());
-        sj.add("정보: " + String.join(" | ", posting.getInfos()));
-        sj.add("#");
+        sj.add("<div>");
+        sj.add("<p>직종: " + posting.getOccupation()+"</p>");
+        sj.add("<p>회사명: " + posting.getCompanyName()+"</p>");
+        sj.add("<p>" + posting.getUrlString()+"</p>");
+        sj.add("<p>" + String.join(" | ", posting.getInfos() + "</p>"));
+        sj.add("</div>");
+        sj.add("<hr>");
         return sj.toString();
     }
 }

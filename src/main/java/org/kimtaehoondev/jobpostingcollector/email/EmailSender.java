@@ -1,9 +1,7 @@
 package org.kimtaehoondev.jobpostingcollector.email;
 
 
-import java.time.LocalDate;
 import java.util.Properties;
-import javax.annotation.PostConstruct;
 import javax.mail.Authenticator;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -24,21 +22,20 @@ public class EmailSender {
     private final Properties emailProperties;
     private final EmailRepository emailRepository;
 
-    public void sendToAll(String content) {
+    public void sendToAll(String title, String content) {
         for (String email : emailRepository.findAll()) {
-            send(email, content);
+            send(email, title, content);
         }
     }
 
-    private void send(String email, String content) {
+    private void send(String email, String title, String content) {
         try {
             Session session = getSession();
             MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress(emailConfig.getUsername()));
-            message.addRecipient(Message.RecipientType.TO,
-                new InternetAddress(email));
-            message.setSubject(LocalDate.now()+ "일자 채용 안내 - 김태훈");
-            message.setText(content, emailConfig.getEncType()); // HTML 내용
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
+            message.setSubject(title);
+            message.setText(content, emailConfig.getEncType(), "html"); // HTML 내용
 
             Transport.send(message);
         } catch (AddressException e) {
