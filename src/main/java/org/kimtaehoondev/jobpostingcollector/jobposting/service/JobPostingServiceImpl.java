@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.kimtaehoondev.jobpostingcollector.dto.JobPostingResponseDto;
 import org.kimtaehoondev.jobpostingcollector.jobposting.JobPosting;
+import org.kimtaehoondev.jobpostingcollector.jobposting.dto.JobPostingData;
 import org.kimtaehoondev.jobpostingcollector.jobposting.repository.JobPostingRepository;
 import org.springframework.stereotype.Service;
 
@@ -21,14 +22,17 @@ public class JobPostingServiceImpl implements JobPostingService {
     }
 
     @Override
-    public void updateAll(List<JobPosting> jobPostings) {
+    public void updateAll(List<JobPostingData> jobPostingDataList) {
+        List<JobPosting> jobPostings = jobPostingDataList.stream()
+            .map(JobPostingData::from)
+            .collect(Collectors.toList());
+
         for (JobPosting jobPosting : jobPostings) {
             boolean isExist = jobPostingRepository.existsByOccupationAndCompanyName(
                 jobPosting.getOccupation(), jobPosting.getCompanyName());
-            // TODO
-//            if (isExist) {
-//                jobPosting.makeOld();
-//            }
+            if (isExist) {
+                jobPosting.renew();
+            }
         }
         jobPostingRepository.deleteAll();
         jobPostingRepository.saveAll(jobPostings);

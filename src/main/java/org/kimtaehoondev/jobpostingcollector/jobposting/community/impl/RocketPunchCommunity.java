@@ -3,8 +3,8 @@ package org.kimtaehoondev.jobpostingcollector.jobposting.community.impl;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import org.kimtaehoondev.jobpostingcollector.jobposting.JobPosting;
 import org.kimtaehoondev.jobpostingcollector.jobposting.community.JobPostingCommunity;
+import org.kimtaehoondev.jobpostingcollector.jobposting.dto.JobPostingData;
 import org.kimtaehoondev.jobpostingcollector.utils.UrlParser;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -46,8 +46,8 @@ public class RocketPunchCommunity implements JobPostingCommunity {
     }
 
     @Override
-    public JobPosting makeJobPostingFrom(WebElement element) {
-        JobPosting.JobPostingBuilder builder = JobPosting.builder();
+    public JobPostingData makeJobPostingFrom(WebElement element) {
+        JobPostingData.JobPostingDataBuilder builder = JobPostingData.builder();
 
         String companyName =
             element.findElement(By.cssSelector(".company-name a")).getText().trim();

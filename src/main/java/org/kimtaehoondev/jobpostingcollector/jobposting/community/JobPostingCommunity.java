@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.kimtaehoondev.jobpostingcollector.exception.impl.ConnectException;
 import org.kimtaehoondev.jobpostingcollector.exception.impl.HttpParsingException;
-import org.kimtaehoondev.jobpostingcollector.jobposting.JobPosting;
+import org.kimtaehoondev.jobpostingcollector.jobposting.dto.JobPostingData;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -26,9 +26,9 @@ public interface JobPostingCommunity {
 
     List<WebElement> getJobPostingElements(WebDriver driver);
 
-    JobPosting makeJobPostingFrom(WebElement element);
+    JobPostingData makeJobPostingFrom(WebElement element);
 
-    default List<JobPosting> scrap(WebDriver driver) {
+    default List<JobPostingData> scrap(WebDriver driver) {
         if (!isConnected()) {
             throw new ConnectException(getUrl());
         }
@@ -48,7 +48,7 @@ public interface JobPostingCommunity {
         }
     }
 
-    default boolean filter(JobPosting jobPosting) {
+    default boolean filter(JobPostingData jobPostingData) {
         return true;
     }
 

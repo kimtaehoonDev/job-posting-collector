@@ -1,7 +1,5 @@
 package org.kimtaehoondev.jobpostingcollector.dto;
 
-import java.util.List;
-import java.util.StringJoiner;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.kimtaehoondev.jobpostingcollector.jobposting.JobPosting;

@@ -4,8 +4,8 @@ import java.net.URL;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
-import org.kimtaehoondev.jobpostingcollector.jobposting.JobPosting;
 import org.kimtaehoondev.jobpostingcollector.jobposting.community.JobPostingCommunity;
+import org.kimtaehoondev.jobpostingcollector.jobposting.dto.JobPostingData;
 import org.kimtaehoondev.jobpostingcollector.utils.UrlParser;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -58,8 +58,8 @@ public class JobPlanetCommunity implements JobPostingCommunity {
     }
 
     @Override
-    public JobPosting makeJobPostingFrom(WebElement element) {
-        JobPosting.JobPostingBuilder builder = JobPosting.builder();
+    public JobPostingData makeJobPostingFrom(WebElement element) {
+        JobPostingData.JobPostingDataBuilder builder = JobPostingData.builder();
 
         String linkString = element.findElement(By.tagName("a")).getAttribute("href");
         builder.link(UrlParser.parse(linkString));
@@ -91,8 +91,8 @@ public class JobPlanetCommunity implements JobPostingCommunity {
     }
 
     @Override
-    public boolean filter(JobPosting jobPosting) {
-        if (jobPosting.isIncludeInfo("spring") || jobPosting.isIncludeInfo("java")) {
+    public boolean filter(JobPostingData jobPostingData) {
+        if (jobPostingData.isIncludeInfo("spring") || jobPostingData.isIncludeInfo("java")) {
             return true;
         }
         return false;
