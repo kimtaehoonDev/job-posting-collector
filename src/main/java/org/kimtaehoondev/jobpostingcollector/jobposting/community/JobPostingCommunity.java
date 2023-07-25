@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.kimtaehoondev.jobpostingcollector.exception.impl.ConnectException;
 import org.kimtaehoondev.jobpostingcollector.exception.impl.HttpParsingException;
-import org.kimtaehoondev.jobpostingcollector.jobposting.dto.JobPostingData;
+import org.kimtaehoondev.jobpostingcollector.jobposting.dto.request.JobPostingData;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;

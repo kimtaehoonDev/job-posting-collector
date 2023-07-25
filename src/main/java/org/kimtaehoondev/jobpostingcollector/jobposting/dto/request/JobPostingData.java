@@ -1,4 +1,4 @@
-package org.kimtaehoondev.jobpostingcollector.jobposting.dto;
+package org.kimtaehoondev.jobpostingcollector.jobposting.dto.request;
 
 import java.net.URL;
 import java.util.List;

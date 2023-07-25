@@ -13,7 +13,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.kimtaehoondev.jobpostingcollector.jobposting.community.JobPostingCommunity;
 import org.kimtaehoondev.jobpostingcollector.jobposting.community.JobPostingCommunityType;
 
 @Entity
@@ -45,18 +44,6 @@ public class JobPosting {
     @Enumerated(value = EnumType.STRING)
     private JobPostingCommunityType community;
 
-    public void makeRenewData() {
-        status = Status.RENEW;
-    }
-
-    public void makeEndData() {
-        status = Status.END;
-    }
-
-    public boolean isEnd() {
-        return status == Status.END;
-    }
-
     public boolean isNew() {
         return status == Status.NEW;
     }
@@ -76,7 +63,7 @@ public class JobPosting {
     }
 
     public enum Status {
-        NEW, RENEW, END;
+        NEW, RENEW;
     }
 
 }

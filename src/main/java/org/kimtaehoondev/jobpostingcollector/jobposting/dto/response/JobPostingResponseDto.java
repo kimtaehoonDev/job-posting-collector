@@ -1,4 +1,4 @@
-package org.kimtaehoondev.jobpostingcollector.dto;
+package org.kimtaehoondev.jobpostingcollector.jobposting.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

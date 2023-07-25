@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.kimtaehoondev.jobpostingcollector.dto.response.JobPostingCrawlingResult;
+import org.kimtaehoondev.jobpostingcollector.jobposting.dto.response.JobPostingCrawlingResult;
 import org.kimtaehoondev.jobpostingcollector.exception.impl.ConnectException;
 import org.kimtaehoondev.jobpostingcollector.exception.impl.HttpParsingException;
 import org.kimtaehoondev.jobpostingcollector.jobposting.community.JobPostingCommunity;
-import org.kimtaehoondev.jobpostingcollector.jobposting.dto.JobPostingData;
+import org.kimtaehoondev.jobpostingcollector.jobposting.dto.request.JobPostingData;
 import org.openqa.selenium.WebDriver;
 import org.springframework.stereotype.Component;
 

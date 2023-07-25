@@ -6,11 +6,11 @@ import java.util.List;
 import java.util.StringJoiner;
 import javax.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
-import org.kimtaehoondev.jobpostingcollector.dto.EmailRegisterRequestDto;
-import org.kimtaehoondev.jobpostingcollector.dto.response.EmailResponseDto;
+import org.kimtaehoondev.jobpostingcollector.email.dto.request.EmailRegisterRequestDto;
+import org.kimtaehoondev.jobpostingcollector.email.dto.response.EmailResponseDto;
 import org.kimtaehoondev.jobpostingcollector.email.EmailSender;
 import org.kimtaehoondev.jobpostingcollector.email.repository.EmailRepository;
-import org.kimtaehoondev.jobpostingcollector.entity.Email;
+import org.kimtaehoondev.jobpostingcollector.email.Email;
 import org.kimtaehoondev.jobpostingcollector.jobposting.JobPosting;
 import org.springframework.stereotype.Component;
 
@@ -20,10 +20,6 @@ public class EmailServiceImpl implements EmailService {
     private final EmailRepository emailRepository;
     private final EmailSender emailSender;
 
-    @PostConstruct
-    void po() {//TODO 삭제
-        emailRepository.save(Email.create("kimth9981@naver.com"));
-    }
     @Override
     public Long registerEmail(EmailRegisterRequestDto dto) {
         Email saved = emailRepository.save(dto.toEntity());

@@ -2,7 +2,7 @@ package org.kimtaehoondev.jobpostingcollector.controller;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.kimtaehoondev.jobpostingcollector.dto.JobPostingResponseDto;
+import org.kimtaehoondev.jobpostingcollector.jobposting.dto.response.JobPostingResponseDto;
 import org.kimtaehoondev.jobpostingcollector.jobposting.service.JobPostingServiceImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

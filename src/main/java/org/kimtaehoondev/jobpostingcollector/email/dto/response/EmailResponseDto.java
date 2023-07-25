@@ -1,4 +1,4 @@
-package org.kimtaehoondev.jobpostingcollector.dto.response;
+package org.kimtaehoondev.jobpostingcollector.email.dto.response;
 
 public interface EmailResponseDto {
     Long getId();

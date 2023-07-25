@@ -3,7 +3,7 @@ package org.kimtaehoondev.jobpostingcollector.scheduler;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
-import org.kimtaehoondev.jobpostingcollector.dto.response.JobPostingCrawlingResult;
+import org.kimtaehoondev.jobpostingcollector.jobposting.dto.response.JobPostingCrawlingResult;
 import org.kimtaehoondev.jobpostingcollector.email.service.EmailService;
 import org.kimtaehoondev.jobpostingcollector.jobposting.JobPostingResolver;
 import org.kimtaehoondev.jobpostingcollector.jobposting.service.JobPostingService;

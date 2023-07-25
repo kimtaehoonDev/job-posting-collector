@@ -1,6 +1,6 @@
-package org.kimtaehoondev.jobpostingcollector.dto;
+package org.kimtaehoondev.jobpostingcollector.email.dto.request;
 
-import org.kimtaehoondev.jobpostingcollector.entity.Email;
+import org.kimtaehoondev.jobpostingcollector.email.Email;
 
 public class EmailRegisterRequestDto {
     private String email;

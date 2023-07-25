@@ -1,10 +1,10 @@
-package org.kimtaehoondev.jobpostingcollector.dto.response;
+package org.kimtaehoondev.jobpostingcollector.jobposting.dto.response;
 
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.kimtaehoondev.jobpostingcollector.jobposting.community.JobPostingCommunity;
-import org.kimtaehoondev.jobpostingcollector.jobposting.dto.JobPostingData;
+import org.kimtaehoondev.jobpostingcollector.jobposting.dto.request.JobPostingData;
 
 @AllArgsConstructor
 public class JobPostingCrawlingResult {

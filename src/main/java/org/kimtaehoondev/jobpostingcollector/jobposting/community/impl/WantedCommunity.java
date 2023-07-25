@@ -1,13 +1,12 @@
 package org.kimtaehoondev.jobpostingcollector.jobposting.community.impl;
 
-import java.net.URL;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.kimtaehoondev.jobpostingcollector.jobposting.community.JobPostingCommunity;
 import org.kimtaehoondev.jobpostingcollector.jobposting.community.JobPostingCommunityType;
-import org.kimtaehoondev.jobpostingcollector.jobposting.dto.JobPostingData;
+import org.kimtaehoondev.jobpostingcollector.jobposting.dto.request.JobPostingData;
 import org.kimtaehoondev.jobpostingcollector.utils.UrlParser;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
