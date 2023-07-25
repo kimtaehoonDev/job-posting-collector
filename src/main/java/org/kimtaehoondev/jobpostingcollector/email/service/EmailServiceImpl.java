@@ -6,7 +6,7 @@ import java.util.StringJoiner;
 import lombok.RequiredArgsConstructor;
 import org.kimtaehoondev.jobpostingcollector.email.Email;
 import org.kimtaehoondev.jobpostingcollector.email.EmailSender;
-import org.kimtaehoondev.jobpostingcollector.email.dto.request.EmailRegisterRequestDto;
+import org.kimtaehoondev.jobpostingcollector.email.dto.request.EmailRequestDto;
 import org.kimtaehoondev.jobpostingcollector.email.dto.response.EmailResponseDto;
 import org.kimtaehoondev.jobpostingcollector.email.repository.EmailRepository;
 import org.kimtaehoondev.jobpostingcollector.jobposting.dto.response.JobPostingResponseDto;
@@ -19,9 +19,15 @@ public class EmailServiceImpl implements EmailService {
     private final EmailSender emailSender;
 
     @Override
-    public Long registerEmail(EmailRegisterRequestDto dto) {
+    public Long register(EmailRequestDto dto) {
         Email saved = emailRepository.save(dto.toEntity());
         return saved.getId();
+    }
+
+    @Override
+    public Long delete(EmailRequestDto dto) {
+        // TODO
+        return null;
     }
 
     @Override

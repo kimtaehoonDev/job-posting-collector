@@ -6,6 +6,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.web.filter.HiddenHttpMethodFilter;
 
 @Configuration
 @EnableScheduling
@@ -21,5 +22,10 @@ public class AppConfig {
         options.addArguments("user-agent=Mozilla/5.0");
 
         return new ChromeDriver(options);
+    }
+
+    @Bean
+    public HiddenHttpMethodFilter hiddenHttpMethodFilter() {
+        return new HiddenHttpMethodFilter();
     }
 }
