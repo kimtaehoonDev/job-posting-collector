@@ -8,4 +8,6 @@ public interface JobPostingService {
     List<JobPostingResponseDto> findAll();
 
     void updateAll(List<JobPostingCrawlingResult> crawlingResults);
+
+    List<JobPostingResponseDto> getNewlyJobPosting();
 }

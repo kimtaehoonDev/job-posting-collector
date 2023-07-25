@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.kimtaehoondev.jobpostingcollector.jobposting.dto.response.JobPostingCrawlingResult;
 import org.kimtaehoondev.jobpostingcollector.email.service.EmailService;
 import org.kimtaehoondev.jobpostingcollector.jobposting.JobPostingResolver;
+import org.kimtaehoondev.jobpostingcollector.jobposting.dto.response.JobPostingResponseDto;
 import org.kimtaehoondev.jobpostingcollector.jobposting.service.JobPostingService;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -19,13 +20,18 @@ public class JobPostingScheduler {
 
     @PostConstruct
     void initData() {
-        updateJobPostingRegularly();
+        updateServer();
     }
 
     @Scheduled(cron = "0 30 6 * * ?")
-    void updateJobPostingRegularly() {
+    void executeRegularUpdate() {
+        updateServer();
+        List<JobPostingResponseDto> postings = jobPostingService.getNewlyJobPosting();
+        emailService.sendJobPostings(postings);
+    }
+
+    private void updateServer() {
         List<JobPostingCrawlingResult> crawlingResults = resolver.crawling();
         jobPostingService.updateAll(crawlingResults);
-        // TODO 이메일을 보낸다
     }
 }

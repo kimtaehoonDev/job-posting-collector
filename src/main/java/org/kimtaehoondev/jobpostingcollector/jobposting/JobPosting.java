@@ -31,11 +31,13 @@ public class JobPosting {
     @Getter
     private String companyName;
 
+    @Getter
     private URL link;
 
     @Getter
     private String infos;
 
+    @Getter
     @Enumerated(value = EnumType.STRING)
     private Status status;
 
@@ -43,14 +45,6 @@ public class JobPosting {
 
     @Enumerated(value = EnumType.STRING)
     private JobPostingCommunityType community;
-
-    public boolean isNew() {
-        return status == Status.NEW;
-    }
-
-    public String getUrlString() {
-        return link.toString();
-    }
 
     public static JobPosting create(String occupation, String companyName, URL link, String infos,
                                     JobPostingCommunityType communityType) {

@@ -21,7 +21,7 @@ public class JobPostingServiceImpl implements JobPostingService {
     @Override
     public List<JobPostingResponseDto> findAll() {
         return jobPostingRepository.findAll().stream()
-            .map(JobPostingResponseDto::from)
+            .map(JobPostingResponseDto::of)
             .collect(Collectors.toList());
     }
 
@@ -34,6 +34,11 @@ public class JobPostingServiceImpl implements JobPostingService {
                 .collect(Collectors.toList());
             updateSpecificCommunity(result.getCommunity(), jobPostings);
         }
+    }
+
+    @Override
+    public List<JobPostingResponseDto> getNewlyJobPosting() {
+        return jobPostingRepository.findAllByStatus(JobPosting.Status.NEW);
     }
 
     private void updateSpecificCommunity(JobPostingCommunity community,

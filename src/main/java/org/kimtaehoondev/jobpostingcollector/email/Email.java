@@ -1,4 +1,4 @@
-package org.kimtaehoondev.jobpostingcollector.entity;
+package org.kimtaehoondev.jobpostingcollector.email;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
