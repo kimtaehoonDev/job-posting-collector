@@ -1,16 +1,14 @@
-package org.kimtaehoondev.jobpostingcollector;
+package org.kimtaehoondev.jobpostingcollector.config;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
 
 @Configuration
-@EnableScheduling
-public class AppConfig {
+public class WebConfig {
     @Bean
     WebDriver webDriver() {
         ChromeOptions options = new ChromeOptions();
@@ -28,4 +26,5 @@ public class AppConfig {
     public HiddenHttpMethodFilter hiddenHttpMethodFilter() {
         return new HiddenHttpMethodFilter();
     }
+
 }
