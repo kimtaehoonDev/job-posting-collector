@@ -1,11 +1,11 @@
-package org.kimtaehoondev.jobpostingcollector;
+package org.kimtaehoondev.jobpostingcollector.scheduler;
 
 import java.util.List;
 import javax.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.kimtaehoondev.jobpostingcollector.dto.response.JobPostingCrawlingResult;
 import org.kimtaehoondev.jobpostingcollector.email.service.EmailService;
 import org.kimtaehoondev.jobpostingcollector.jobposting.JobPostingResolver;
-import org.kimtaehoondev.jobpostingcollector.jobposting.dto.JobPostingData;
 import org.kimtaehoondev.jobpostingcollector.jobposting.service.JobPostingService;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -24,8 +24,8 @@ public class JobPostingScheduler {
 
     @Scheduled(cron = "0 30 6 * * ?")
     void updateJobPostingRegularly() {
-        List<JobPostingData> jobPostings = resolver.getJobPostings();
-        jobPostingService.updateAll(jobPostings);
+        List<JobPostingCrawlingResult> crawlingResults = resolver.crawling();
+        jobPostingService.updateAll(crawlingResults);
         // TODO 이메일을 보낸다
     }
 }

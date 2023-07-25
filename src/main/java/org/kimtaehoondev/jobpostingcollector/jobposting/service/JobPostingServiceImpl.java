@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.kimtaehoondev.jobpostingcollector.dto.JobPostingResponseDto;
+import org.kimtaehoondev.jobpostingcollector.dto.response.JobPostingCrawlingResult;
 import org.kimtaehoondev.jobpostingcollector.jobposting.JobPosting;
+import org.kimtaehoondev.jobpostingcollector.jobposting.community.JobPostingCommunity;
 import org.kimtaehoondev.jobpostingcollector.jobposting.dto.JobPostingData;
 import org.kimtaehoondev.jobpostingcollector.jobposting.repository.JobPostingRepository;
 import org.springframework.stereotype.Service;
@@ -25,11 +27,17 @@ public class JobPostingServiceImpl implements JobPostingService {
 
     @Override
     @Transactional
-    public void updateAll(List<JobPostingData> jobPostingDataList) {
-        List<JobPosting> jobPostings = jobPostingDataList.stream()
-            .map(JobPostingData::from)
-            .collect(Collectors.toList());
+    public void updateAll(List<JobPostingCrawlingResult> crawlingResults) {
+        for (JobPostingCrawlingResult result : crawlingResults) {
+            List<JobPosting> jobPostings = result.getResult().stream()
+                .map(JobPostingData::from)
+                .collect(Collectors.toList());
+            updateSpecificCommunity(result.getCommunity(), jobPostings);
+        }
+    }
 
+    private void updateSpecificCommunity(JobPostingCommunity community,
+                                         List<JobPosting> jobPostings) {
         for (JobPosting jobPosting : jobPostings) {
             boolean isExist = jobPostingRepository.existsByOccupationAndCompanyName(
                 jobPosting.getOccupation(), jobPosting.getCompanyName());
@@ -37,7 +45,7 @@ public class JobPostingServiceImpl implements JobPostingService {
                 jobPosting.renew();
             }
         }
-        jobPostingRepository.deleteAll();
+        jobPostingRepository.deleteAllByCommunity(community.getCommunityType());
         jobPostingRepository.saveAll(jobPostings);
     }
 }

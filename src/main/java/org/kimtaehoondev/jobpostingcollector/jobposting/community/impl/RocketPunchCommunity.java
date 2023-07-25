@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import org.kimtaehoondev.jobpostingcollector.jobposting.community.JobPostingCommunity;
+import org.kimtaehoondev.jobpostingcollector.jobposting.community.JobPostingCommunityType;
 import org.kimtaehoondev.jobpostingcollector.jobposting.dto.JobPostingData;
 import org.kimtaehoondev.jobpostingcollector.utils.UrlParser;
 import org.openqa.selenium.By;
@@ -13,15 +14,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class RocketPunchCommunity implements JobPostingCommunity {
-    // 필터링 조건: SW개발, JAVA, 신입, 인턴, 웹서비스
-    private final URL url = UrlParser.parse(
-        "https://www.rocketpunch.com/jobs?job=1&specialty=Java&career_type=1&career_type=4&tag=%EC%9B%B9%EC%84%9C%EB%B9%84%EC%8A%A4");
+    private JobPostingCommunityType communityType = JobPostingCommunityType.ROCKET_PUNCH;
     private Status status = Status.GOOD;
 
-
     @Override
-    public String getUrl() {
-        return url.toString();
+    public JobPostingCommunityType getCommunityType() {
+        return communityType;
     }
 
     @Override

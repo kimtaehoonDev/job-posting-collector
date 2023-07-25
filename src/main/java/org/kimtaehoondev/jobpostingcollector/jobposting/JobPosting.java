@@ -3,6 +3,8 @@ package org.kimtaehoondev.jobpostingcollector.jobposting;
 import java.net.URL;
 import java.time.LocalDateTime;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -11,6 +13,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.kimtaehoondev.jobpostingcollector.jobposting.community.JobPostingCommunity;
+import org.kimtaehoondev.jobpostingcollector.jobposting.community.JobPostingCommunityType;
 
 @Entity
 @ToString
@@ -33,9 +37,13 @@ public class JobPosting {
     @Getter
     private String infos;
 
+    @Enumerated(value = EnumType.STRING)
     private Status status;
 
     private LocalDateTime createdAt;
+
+    @Enumerated(value = EnumType.STRING)
+    private JobPostingCommunityType community;
 
     public void makeRenewData() {
         status = Status.RENEW;
@@ -57,9 +65,10 @@ public class JobPosting {
         return link.toString();
     }
 
-    public static JobPosting create(String occupation, String companyName, URL link, String infos) {
-        return new JobPosting(null, occupation, companyName,
-            link, infos, Status.NEW, LocalDateTime.now());
+    public static JobPosting create(String occupation, String companyName, URL link, String infos,
+                                    JobPostingCommunityType communityType) {
+        return new JobPosting(null, occupation, companyName, link, infos, Status.NEW,
+            LocalDateTime.now(), communityType);
     }
 
     public void renew() {
@@ -69,4 +78,5 @@ public class JobPosting {
     public enum Status {
         NEW, RENEW, END;
     }
+
 }

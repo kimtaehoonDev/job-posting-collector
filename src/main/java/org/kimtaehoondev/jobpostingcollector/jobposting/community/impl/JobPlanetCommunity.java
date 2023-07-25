@@ -1,10 +1,10 @@
 package org.kimtaehoondev.jobpostingcollector.jobposting.community.impl;
 
-import java.net.URL;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import org.kimtaehoondev.jobpostingcollector.jobposting.community.JobPostingCommunity;
+import org.kimtaehoondev.jobpostingcollector.jobposting.community.JobPostingCommunityType;
 import org.kimtaehoondev.jobpostingcollector.jobposting.dto.JobPostingData;
 import org.kimtaehoondev.jobpostingcollector.utils.UrlParser;
 import org.openqa.selenium.By;
@@ -17,12 +17,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class JobPlanetCommunity implements JobPostingCommunity {
-    private final URL url = UrlParser.parse("https://www.jobplanet.co.kr/job");
+    private JobPostingCommunityType communityType = JobPostingCommunityType.JOB_PLANET;
     private Status status = Status.GOOD;
 
     @Override
-    public String getUrl() {
-        return url.toString();
+    public JobPostingCommunityType getCommunityType() {
+        return communityType;
     }
 
     @Override

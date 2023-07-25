@@ -10,9 +10,13 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 public interface JobPostingCommunity {
-    String getUrl();
+    JobPostingCommunityType getCommunityType();
 
     void changeStatus(Status status);
+
+    default String getUrl() {
+        return getCommunityType().getUrl().toString();
+    }
 
     // TODO
     /**

@@ -2,10 +2,10 @@ package org.kimtaehoondev.jobpostingcollector.jobposting.service;
 
 import java.util.List;
 import org.kimtaehoondev.jobpostingcollector.dto.JobPostingResponseDto;
-import org.kimtaehoondev.jobpostingcollector.jobposting.dto.JobPostingData;
+import org.kimtaehoondev.jobpostingcollector.dto.response.JobPostingCrawlingResult;
 
 public interface JobPostingService {
     List<JobPostingResponseDto> findAll();
 
-    void updateAll(List<JobPostingData> jobPostings);
+    void updateAll(List<JobPostingCrawlingResult> crawlingResults);
 }

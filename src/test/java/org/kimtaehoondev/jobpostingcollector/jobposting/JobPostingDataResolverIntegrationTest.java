@@ -11,7 +11,7 @@ class JobPostingDataResolverIntegrationTest {
 
     @Test
     void test() {
-        jobPostingResolver.getJobPostings();
+        jobPostingResolver.crawling();
     }
 
 }
