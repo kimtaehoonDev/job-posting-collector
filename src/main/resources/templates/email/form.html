@@ -7,15 +7,15 @@
 <body>
 <h1>이메일 등록</h1>
 <form th:method="post" th:action="@{/email}">
-    <input type="email" placeholder="이메일을 입력하세요"/>
-    <input type="password" placeholder="비밀번호를 입력하세요"/>
+    <input type="email" th:name="email" placeholder="이메일을 입력하세요"/>
+    <input type="password" th:name="pwd" placeholder="비밀번호를 입력하세요"/>
     <input type="submit">
 </form>
 <hr>
 <h1>이메일 삭제</h1>
 <form th:method="delete" th:action="@{/email}">
-    <input type="email" placeholder="이메일을 입력하세요"/>
-    <input type="password" placeholder="비밀번호를 입력하세요"/>
+    <input type="email" th:name="email" placeholder="이메일을 입력하세요"/>
+    <input type="password" th:name="pwd" placeholder="비밀번호를 입력하세요"/>
     <input type="submit">
 </form>
 </body>

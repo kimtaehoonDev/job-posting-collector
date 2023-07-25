@@ -8,8 +8,10 @@ import org.kimtaehoondev.jobpostingcollector.email.Email;
 import org.kimtaehoondev.jobpostingcollector.email.EmailSender;
 import org.kimtaehoondev.jobpostingcollector.email.dto.request.EmailRequestDto;
 import org.kimtaehoondev.jobpostingcollector.email.dto.response.EmailResponseDto;
+import org.kimtaehoondev.jobpostingcollector.email.dto.response.EmailWithPwdDto;
 import org.kimtaehoondev.jobpostingcollector.email.repository.EmailRepository;
 import org.kimtaehoondev.jobpostingcollector.jobposting.dto.response.JobPostingResponseDto;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -17,17 +19,30 @@ import org.springframework.stereotype.Component;
 public class EmailServiceImpl implements EmailService {
     private final EmailRepository emailRepository;
     private final EmailSender emailSender;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public Long register(EmailRequestDto dto) {
-        Email saved = emailRepository.save(dto.toEntity());
+        boolean isDuplicated = emailRepository.existsByEmail(dto.getEmail());
+        if (isDuplicated) {
+            throw new RuntimeException("존재하지않는 아이디");
+        }
+
+        String encoded = passwordEncoder.encode(dto.getPwd());
+        Email saved = emailRepository.save(Email.create(dto.getEmail(), encoded));
         return saved.getId();
     }
 
     @Override
     public Long delete(EmailRequestDto dto) {
-        // TODO
-        return null;
+        EmailWithPwdDto result = emailRepository.findByEmail(dto.getEmail())
+            .orElseThrow(() -> new RuntimeException("존재하지않는 아이디"));
+        boolean matches = passwordEncoder.matches(dto.getPwd(), result.getPwd());
+        if (!matches) {
+            throw new RuntimeException("존재하지않는 아이디");
+        }
+        emailRepository.deleteById(result.getId());
+        return result.getId();
     }
 
     @Override

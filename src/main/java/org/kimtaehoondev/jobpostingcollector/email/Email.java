@@ -25,7 +25,10 @@ public class Email {
     @javax.validation.constraints.Email
     private String email;
 
-    public static Email create(String email) {
-        return new Email(null, email);
+    @Column
+    private String pwd;
+
+    public static Email create(String email, String pwd) {
+        return new Email(null, email, pwd);
     }
 }

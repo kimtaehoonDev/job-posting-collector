@@ -1,13 +1,14 @@
 package org.kimtaehoondev.jobpostingcollector.email.dto.request;
 
-import org.kimtaehoondev.jobpostingcollector.email.Email;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+
+@NoArgsConstructor
+@Getter
+@Setter
 public class EmailRequestDto {
     private String email;
     private String pwd;
-
-    public Email toEntity() {
-        return Email.create(email);
-    }
-
 }
