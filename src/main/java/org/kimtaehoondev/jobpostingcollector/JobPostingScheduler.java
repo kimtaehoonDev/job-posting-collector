@@ -14,8 +14,9 @@ public class JobPostingScheduler {
 
     @Scheduled(cron = "0 30 6 * * ?")
     void updateJobPostingRegularly() {
-        resolver.updateJobPosting();
-        jobPostingService.sendJobPostingUpdateToAll();
+        List<JobPosting> jobPostings = resolver.getJobPostings(); // TODO DTO를 만들어서 반환
+        jobPostingService.updateAll(jobPostings);
+        // TODO 이메일을 보낸다
     }
 
     @Scheduled(cron = "0 */20 * * * ?")

@@ -11,7 +11,7 @@ class JobPostingResolverIntegrationTest {
 
     @Test
     void test() {
-        jobPostingResolver.updateJobPosting();
+        jobPostingResolver.getJobPostings();
     }
 
 }

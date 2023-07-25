@@ -3,40 +3,48 @@ package org.kimtaehoondev.jobpostingcollector.jobposting;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import lombok.AccessLevel;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+@Entity
 @ToString
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class JobPosting {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter
-    private final Identifier identifier;
+    private Long id;
 
     @Getter
-    private final String occupation;
+    private String occupation;
 
     @Getter
-    private final String companyName;
+    private String companyName;
 
-    private final URL link;
+    private URL link;
 
     @Getter
-    private final List<String> infos;
+    private String infos;
 
     private Status status;
 
-    private final LocalDateTime createdAt;
+    private LocalDateTime createdAt;
 
 
     @Builder
     private JobPosting(String occupation, String companyName, URL link, List<String> infos) {
-        this.identifier = new Identifier(occupation, companyName);
         this.occupation = occupation;
         this.companyName = companyName;
         this.link = link;
-        this.infos = infos;
+        this.infos = infos.stream().map(String::toLowerCase).collect(Collectors.joining(" | "));
         this.status = Status.NEW;
         this.createdAt = LocalDateTime.now();
     }
@@ -62,17 +70,7 @@ public class JobPosting {
     }
 
     public boolean isIncludeInfo(String info) {
-        return infos.stream()
-            .map(String::toLowerCase)
-            .anyMatch(each -> each.contains(info.toLowerCase()));
-    }
-
-    @RequiredArgsConstructor
-    @EqualsAndHashCode
-    @ToString
-    public static class Identifier {
-        private final String occupation;
-        private final String companyName;
+        return infos.contains(info.toLowerCase());
     }
 
     enum Status {

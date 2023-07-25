@@ -4,27 +4,33 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.kimtaehoondev.jobpostingcollector.dto.JobPostingResponseDto;
-import org.kimtaehoondev.jobpostingcollector.email.service.EmailService;
 import org.kimtaehoondev.jobpostingcollector.jobposting.JobPosting;
-import org.kimtaehoondev.jobpostingcollector.jobposting.repository.JobPostingStore;
+import org.kimtaehoondev.jobpostingcollector.jobposting.repository.JobPostingRepository;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class JobPostingServiceImpl implements JobPostingService {
-    private final JobPostingStore jobPostingStore;
-    private final EmailService emailService;
+    private final JobPostingRepository jobPostingRepository;
 
     @Override
     public List<JobPostingResponseDto> findAll() {
-        return jobPostingStore.findAll().stream()
+        return jobPostingRepository.findAll().stream()
             .map(JobPostingResponseDto::from)
             .collect(Collectors.toList());
     }
 
     @Override
-    public void sendJobPostingUpdateToAll() {
-        List<JobPosting> jobPostings = jobPostingStore.findAll();
-        emailService.sendJobPostingUpdateToAll(jobPostings);
+    public void updateAll(List<JobPosting> jobPostings) {
+        for (JobPosting jobPosting : jobPostings) {
+            boolean isExist = jobPostingRepository.existsByOccupationAndCompanyName(
+                jobPosting.getOccupation(), jobPosting.getCompanyName());
+            // TODO
+//            if (isExist) {
+//                jobPosting.makeOld();
+//            }
+        }
+        jobPostingRepository.deleteAll();
+        jobPostingRepository.saveAll(jobPostings);
     }
 }

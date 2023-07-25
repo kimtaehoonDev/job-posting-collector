@@ -23,13 +23,8 @@ public class JobPostingResponseDto {
         String occupation = jobPosting.getOccupation();
         String companyName = jobPosting.getCompanyName();
         String link = jobPosting.getUrlString();
-        StringJoiner sj = new StringJoiner(" | ");
-        List<String> infos = jobPosting.getInfos();
-        for (String info : infos) {
-            sj.add(info);
-        }
         boolean isNew = jobPosting.isNew();
 
-        return new JobPostingResponseDto(occupation, companyName, link, sj.toString(), isNew);
+        return new JobPostingResponseDto(occupation, companyName, link, jobPosting.getInfos(), isNew);
     }
 }
