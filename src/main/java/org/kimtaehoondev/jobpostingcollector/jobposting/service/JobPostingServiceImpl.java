@@ -8,9 +8,11 @@ import org.kimtaehoondev.jobpostingcollector.jobposting.JobPosting;
 import org.kimtaehoondev.jobpostingcollector.jobposting.dto.JobPostingData;
 import org.kimtaehoondev.jobpostingcollector.jobposting.repository.JobPostingRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class JobPostingServiceImpl implements JobPostingService {
     private final JobPostingRepository jobPostingRepository;
 
@@ -22,6 +24,7 @@ public class JobPostingServiceImpl implements JobPostingService {
     }
 
     @Override
+    @Transactional
     public void updateAll(List<JobPostingData> jobPostingDataList) {
         List<JobPosting> jobPostings = jobPostingDataList.stream()
             .map(JobPostingData::from)
