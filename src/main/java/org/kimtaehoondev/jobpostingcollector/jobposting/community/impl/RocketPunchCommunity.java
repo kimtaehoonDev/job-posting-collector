@@ -62,6 +62,7 @@ public class RocketPunchCommunity implements JobPostingCommunity {
         List<String> infos = makeInfos(element);
         builder.infos(infos);
 
+        builder.communityType(communityType);
         return builder.build();
     }
 

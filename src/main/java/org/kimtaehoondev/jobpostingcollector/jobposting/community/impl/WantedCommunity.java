@@ -113,6 +113,7 @@ public class WantedCommunity implements JobPostingCommunity {
         }
         builder.infos(infos);
 
+        builder.communityType(communityType);
         return builder.build();
     }
 }

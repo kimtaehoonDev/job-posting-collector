@@ -87,6 +87,8 @@ public class JobPlanetCommunity implements JobPostingCommunity {
         infos.add(reward.getText());
 
         builder.infos(infos);
+
+        builder.communityType(communityType);
         return builder.build();
     }
 
