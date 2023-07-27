@@ -4,8 +4,10 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.StringJoiner;
 import lombok.RequiredArgsConstructor;
+import org.kimtaehoondev.jobpostingcollector.email.auth.generator.AuthCodeGenerator;
 import org.kimtaehoondev.jobpostingcollector.email.Email;
 import org.kimtaehoondev.jobpostingcollector.email.EmailSender;
+import org.kimtaehoondev.jobpostingcollector.email.auth.storage.TemporaryStorage;
 import org.kimtaehoondev.jobpostingcollector.email.dto.request.EmailDeleteDto;
 import org.kimtaehoondev.jobpostingcollector.email.dto.request.EmailRegisterDto;
 import org.kimtaehoondev.jobpostingcollector.email.dto.response.EmailResponseDto;
@@ -21,6 +23,8 @@ public class EmailServiceImpl implements EmailService {
     private final EmailRepository emailRepository;
     private final EmailSender emailSender;
     private final PasswordEncoder passwordEncoder;
+    private final AuthCodeGenerator authCodeGenerator;
+    private final TemporaryStorage tempStorage;
 
     @Override
     public Long register(EmailRegisterDto dto) {
@@ -58,7 +62,9 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public void sendAuthCode(String email) {
-        //TODO
+        String random = authCodeGenerator.generate();
+        emailSender.sendHtml(email,"[채용 정보 크롤러] 인증 코드", "인증코드는 [" +random+"] 입니다");
+        tempStorage.put(email, random);
     }
 
     @Override
