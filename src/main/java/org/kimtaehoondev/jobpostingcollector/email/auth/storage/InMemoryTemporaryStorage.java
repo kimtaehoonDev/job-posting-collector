@@ -4,10 +4,13 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import org.springframework.stereotype.Component;
 
 @Component
 public class InMemoryTemporaryStorage implements TemporaryStorage {
+    public static final int MINUTE = 60;
+
     private final Map<String, Data> store = new HashMap<>();
     @Override
     public String put(String key, String value) {
@@ -18,6 +21,15 @@ public class InMemoryTemporaryStorage implements TemporaryStorage {
             return null;
         }
         return old.value;
+    }
+
+    @Override
+    public boolean isValid(String key, String value) {
+        Data data = getValidData(key);
+        if (data == null) {
+            return false;
+        }
+        return Objects.equals(value, data.value);
     }
 
     private Data getValidData(String key) {
@@ -43,8 +55,8 @@ public class InMemoryTemporaryStorage implements TemporaryStorage {
         }
 
         public boolean isTimeout() {
-            long minuteGap = ChronoUnit.MINUTES.between(LocalDateTime.now(), createdAt);
-            if (minuteGap > 3) {
+            long secondGap = ChronoUnit.SECONDS.between(createdAt, LocalDateTime.now());
+            if (secondGap >= 3 * MINUTE) {
                 return true;
             }
             return false;
