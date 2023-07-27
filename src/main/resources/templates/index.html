@@ -10,8 +10,13 @@
 <div class="container">
     <h1>채용정보 모음</h1>
     <div class="subscription-wrap">
-        <div class="subscription" th:onclick="|location.href='@{/email}'|">
-            구독/구독취소
+        <div class="subscription" th:onclick="|location.href='@{/email/register}'|">
+            구독 신청
+        </div>
+    </div>
+    <div class="subscription-wrap">
+        <div class="subscription" th:onclick="|location.href='@{/email/delete}'|">
+            구독 취소
         </div>
     </div>
 

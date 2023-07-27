@@ -9,6 +9,10 @@
     color: #000;
 }
 
+.error {
+    color: red;
+}
+
 .container {
     width: 840px;
     margin: 0 auto;
