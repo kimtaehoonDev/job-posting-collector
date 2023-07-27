@@ -69,8 +69,9 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public void verifyAuthCode(String email, String code) {
-        //TODO
-
+        if (!tempStorage.isValid(email, code)) {
+            throw new RuntimeException("보내준 코드가 만료되었거나, 일치하지 않습니다");
+        }
     }
 
 
