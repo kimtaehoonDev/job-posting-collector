@@ -12,11 +12,25 @@
 .container {
     width: 840px;
     margin: 0 auto;
+    margin-top: 20px;
 }
+
+.subscription-wrap {
+    height: 50px;
+    margin-top: 14px;
+    margin-bottom: 14px;
+}
+
+.subscription {
+    width: 150px;
+    font-size: 24px;
+    text-align: center;
+    cursor: pointer;
+}
+
 .job-posting {
     display: flex;
     margin-bottom: 5px;
-
     border-bottom: 1px solid black; /* 수평선 스타일 지정 */
 }
 .job-posting-identifier {

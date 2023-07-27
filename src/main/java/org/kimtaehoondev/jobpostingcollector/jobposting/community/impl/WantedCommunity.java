@@ -3,7 +3,6 @@ package org.kimtaehoondev.jobpostingcollector.jobposting.community.impl;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.RequiredArgsConstructor;
 import org.kimtaehoondev.jobpostingcollector.jobposting.community.JobPostingCommunity;
 import org.kimtaehoondev.jobpostingcollector.jobposting.community.JobPostingCommunityType;
 import org.kimtaehoondev.jobpostingcollector.jobposting.dto.request.JobPostingData;
@@ -16,7 +15,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
 public class WantedCommunity implements JobPostingCommunity {
     private JobPostingCommunityType communityType = JobPostingCommunityType.WANTED;
     private Status status = Status.GOOD;
