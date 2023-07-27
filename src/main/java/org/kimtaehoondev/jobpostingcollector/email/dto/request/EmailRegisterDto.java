@@ -8,7 +8,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class EmailRequestDto {
+public class EmailRegisterDto {
     private String email;
+    private String code;
     private String pwd;
 }

@@ -6,7 +6,8 @@ import java.util.StringJoiner;
 import lombok.RequiredArgsConstructor;
 import org.kimtaehoondev.jobpostingcollector.email.Email;
 import org.kimtaehoondev.jobpostingcollector.email.EmailSender;
-import org.kimtaehoondev.jobpostingcollector.email.dto.request.EmailRequestDto;
+import org.kimtaehoondev.jobpostingcollector.email.dto.request.EmailDeleteDto;
+import org.kimtaehoondev.jobpostingcollector.email.dto.request.EmailRegisterDto;
 import org.kimtaehoondev.jobpostingcollector.email.dto.response.EmailResponseDto;
 import org.kimtaehoondev.jobpostingcollector.email.dto.response.EmailWithPwdDto;
 import org.kimtaehoondev.jobpostingcollector.email.repository.EmailRepository;
@@ -22,7 +23,7 @@ public class EmailServiceImpl implements EmailService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public Long register(EmailRequestDto dto) {
+    public Long register(EmailRegisterDto dto) {
         boolean isDuplicated = emailRepository.existsByEmail(dto.getEmail());
         if (isDuplicated) {
             throw new RuntimeException("존재하지않는 아이디");
@@ -34,7 +35,7 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public Long delete(EmailRequestDto dto) {
+    public Long delete(EmailDeleteDto dto) {
         EmailWithPwdDto result = emailRepository.findByEmail(dto.getEmail())
             .orElseThrow(() -> new RuntimeException("존재하지않는 아이디"));
         boolean matches = passwordEncoder.matches(dto.getPwd(), result.getPwd());
@@ -53,6 +54,17 @@ public class EmailServiceImpl implements EmailService {
         for (EmailResponseDto emailResponseDto : total) {
             emailSender.sendHtml(emailResponseDto.getEmail(), title, message);
         }
+    }
+
+    @Override
+    public void sendAuthCode(String email) {
+        //TODO
+    }
+
+    @Override
+    public void verifyAuthCode(String email, String code) {
+        //TODO
+
     }
 
 

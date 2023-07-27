@@ -1,7 +1,10 @@
 package org.kimtaehoondev.jobpostingcollector.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.kimtaehoondev.jobpostingcollector.email.dto.request.EmailRequestDto;
+import org.kimtaehoondev.jobpostingcollector.email.dto.request.EmailDeleteDto;
+import org.kimtaehoondev.jobpostingcollector.email.dto.request.EmailRegisterDto;
+import org.kimtaehoondev.jobpostingcollector.email.dto.request.SendAuthCodeDto;
+import org.kimtaehoondev.jobpostingcollector.email.dto.request.VerifyAuthCodeDto;
 import org.kimtaehoondev.jobpostingcollector.email.service.EmailService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,13 +25,25 @@ public class EmailController {
     }
 
     @PostMapping
-    public String register(@ModelAttribute EmailRequestDto dto) {
+    public String register(@ModelAttribute EmailRegisterDto dto) {
         emailService.register(dto);
         return "redirect:/";
     }
     @DeleteMapping
-    public String delete(@ModelAttribute EmailRequestDto dto) {
+    public String delete(@ModelAttribute EmailDeleteDto dto) {
         emailService.delete(dto);
         return "redirect:/";
+    }
+
+    @PostMapping("/auth/send")
+    public String sendAuthCode(@ModelAttribute SendAuthCodeDto dto) {
+        emailService.sendAuthCode(dto.getEmail());
+        return "redirect:/email";
+    }
+
+    @PostMapping("/auth/verify")
+    public String verifyAuthCode(@ModelAttribute VerifyAuthCodeDto dto) {
+        emailService.verifyAuthCode(dto.getEmail(), dto.getCode());
+        return "redirect:/email";
     }
 }
