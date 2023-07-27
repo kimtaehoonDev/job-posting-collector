@@ -6,8 +6,10 @@
 </head>
 <body>
 <h1>이메일 등록</h1>
-<form th:method="post" th:action="@{/email}">
+<form th:method="post" th:action="@{/email}" id="register-form">
     <input type="email" th:name="email" placeholder="이메일을 입력하세요"/>
+    <input type="button" value="인증 메일 받기" onclick="sendPostRequest('/email/auth/send')">
+    <br>
     <input type="password" th:name="pwd" placeholder="비밀번호를 입력하세요"/>
     <input type="submit">
 </form>
@@ -18,5 +20,13 @@
     <input type="password" th:name="pwd" placeholder="비밀번호를 입력하세요"/>
     <input type="submit">
 </form>
+
+<script>
+    function sendPostRequest(url) {
+        const form = document.getElementById('register-form');
+        form.setAttribute('action', url);
+        form.submit();
+    }
+</script>
 </body>
 </html>
