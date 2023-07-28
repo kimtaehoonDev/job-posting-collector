@@ -1,5 +1,7 @@
 package org.kimtaehoondev.jobpostingcollector.controller;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.kimtaehoondev.jobpostingcollector.email.dto.request.EmailDeleteDto;
 import org.kimtaehoondev.jobpostingcollector.email.dto.request.EmailRegisterDto;
@@ -7,14 +9,18 @@ import org.kimtaehoondev.jobpostingcollector.email.dto.request.EmailRequestDto;
 import org.kimtaehoondev.jobpostingcollector.email.dto.request.SendAuthCodeDto;
 import org.kimtaehoondev.jobpostingcollector.email.dto.request.VerifyAuthCodeDto;
 import org.kimtaehoondev.jobpostingcollector.email.service.EmailService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequiredArgsConstructor
@@ -39,13 +45,19 @@ public class EmailController {
     }
 
     @PostMapping("/auth/send")
-    public String sendAuthCode(@Validated @ModelAttribute("emailDto") SendAuthCodeDto dto,
-                               BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return "email/register-form";
+    @ResponseBody
+    public ResponseEntity<List<String>> sendAuthCode(@Validated @RequestBody SendAuthCodeDto dto,
+                                               BindingResult bindingResult) {
+        List<FieldError> emailErrors = bindingResult.getFieldErrors("email");
+
+        if (!emailErrors.isEmpty()) {
+            List<String> errorMessages = emailErrors.stream()
+                .map(error -> error.getDefaultMessage())
+                .collect(Collectors.toList());
+            return ResponseEntity.badRequest().body(errorMessages);
         }
         emailService.sendAuthCode(dto.getEmail());
-        return "redirect:/email/register";
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/auth/verify")

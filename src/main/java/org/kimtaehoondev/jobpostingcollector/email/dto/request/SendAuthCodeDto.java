@@ -12,8 +12,4 @@ import lombok.Setter;
 public class SendAuthCodeDto {
     @NotEmpty(message = "이메일은 필수로 입력되어야 합니다")
     private String email;
-
-    private String code;
-
-    private String pwd;
 }
