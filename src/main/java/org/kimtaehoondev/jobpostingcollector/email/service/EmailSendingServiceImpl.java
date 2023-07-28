@@ -26,13 +26,11 @@ public class EmailSendingServiceImpl implements EmailSendingService {
         String title = LocalDate.now() + "일자 채용 안내 - 김태훈";
         Map<String, Object> variables = new HashMap<>();
         variables.put("postings", jobPostings);
-        Context context = new Context(Locale.KOREAN, variables);
-        context.setVariable("title", title);
-        String message =
-            templateEngine.process("/email/job-posting.html", context);
+
         List<EmailResponseDto> total = emailRepository.findAllBy();
         for (EmailResponseDto emailResponseDto : total) {
-            emailSender.sendHtml(emailResponseDto.getEmail(), title, message);
+            sendEmail(emailResponseDto.getEmail(), title,
+                "/email/job-posting.html", variables);
         }
     }
 
@@ -40,17 +38,24 @@ public class EmailSendingServiceImpl implements EmailSendingService {
     public void sendAuthCode(String email, String authCode) {
         validateEmailDuplicated(email);
         String title = "[채용 정보 크롤러] 인증 코드";
+
         Map<String, Object> variables = new HashMap<>();
         variables.put("code", authCode);
+
         Context context = new Context(Locale.KOREAN, variables);
         context.setVariable("title", title);
-        String message =
-            templateEngine.process("/email/auth-code.html", context);
 
-        emailSender.sendHtml(email,title, message);
+        sendEmail(email, title,
+            "/email/auth-code.html", variables);
     }
 
+    private void sendEmail(String email, String title, String templatePath, Map<String, Object> variables) {
+        Context context = new Context(Locale.KOREAN, variables);
+        context.setVariable("title", title);
 
+        String message = templateEngine.process(templatePath, context);
+        emailSender.sendHtml(email, title, message);
+    }
 
     private void validateEmailDuplicated(String email) {
         boolean isDuplicated = emailRepository.existsByEmail(email);

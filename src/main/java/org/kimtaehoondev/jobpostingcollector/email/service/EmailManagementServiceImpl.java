@@ -23,8 +23,7 @@ public class EmailManagementServiceImpl implements EmailManagementService {
     @Override
     public Long register(EmailRegisterDto dto) {
         validateEmailDuplicated(dto.getEmail());
-        boolean isValid = certificateTemporaryStorage.isValid(dto.getEmail(), dto.getCode());
-        if (!isValid) {
+        if (!certificateTemporaryStorage.isValid(dto.getEmail(), dto.getCode())) {
             throw new RuntimeException("이미 만료되었거나 적절하지 않은 이메일입니다");
         }
 
@@ -37,8 +36,7 @@ public class EmailManagementServiceImpl implements EmailManagementService {
     public Long delete(EmailDeleteDto dto) {
         EmailWithPwdDto result = emailRepository.findByEmail(dto.getEmail())
             .orElseThrow(() -> new RuntimeException("존재하지않는 아이디"));
-        boolean matches = passwordEncoder.matches(dto.getPwd(), result.getPwd());
-        if (!matches) {
+        if (!passwordEncoder.matches(dto.getPwd(), result.getPwd())) {
             throw new RuntimeException("존재하지않는 아이디");
         }
         emailRepository.deleteById(result.getId());
