@@ -22,6 +22,8 @@ repositories {
 }
 
 dependencies {
+	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+
 	// https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java
 	implementation 'org.seleniumhq.selenium:selenium-java:4.10.0'
 
