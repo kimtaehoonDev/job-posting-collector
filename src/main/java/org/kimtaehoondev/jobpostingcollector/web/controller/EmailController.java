@@ -43,16 +43,14 @@ public class EmailController {
         return "redirect:/";
     }
 
-
-
     @GetMapping("/delete")
     public String showDeleteForm(Model model) {
-        model.addAttribute("emailDeleteDto", new EmailDeleteDto());
+        model.addAttribute("emailDto", new EmailDeleteDto());
         return "email/delete-form";
     }
 
     @PostMapping("/delete")
-    public String delete(@Validated @ModelAttribute("emailDeleteDto") EmailDeleteDto dto,
+    public String delete(@Validated @ModelAttribute("emailDto") EmailDeleteDto dto,
                          BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "email/delete-form";
