@@ -11,14 +11,15 @@
     <div id="email-wrap">
         <input type="email" th:field="*{email}" placeholder="이메일을 입력하세요" />
         <button type="button" id="send-email-btn">인증 메일 받기</button>
-        <div class="error" id="email-error" th:errors="*{email}"></div>
+        <div class="error" th:errors="*{email}"></div>
     </div>
 
     <div id="code-wrap" style="display: none">
         <br>
-        3분 안에 입력을 완료해주세요<br>
         <input type="text" th:field="*{code}" placeholder="코드를 입력하세요">
         <button type="button" id="verify-email-btn">인증</button>
+        <div class="error" th:errors="*{code}"></div>
+        <div id="time-limit-description">3분 안에 입력을 완료해주세요<br></div>
     </div>
 
     <br>
@@ -30,10 +31,57 @@
 <hr>
 
 <script>
+    document.getElementById("verify-email-btn").addEventListener("click", () => {
+        const input = {
+            email: document.getElementById("email").value,
+            code: document.getElementById("code").value,
+        };
+
+        fetch("/email/auth/verify", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(input),
+        })
+            .then(resp => {
+                if (!resp.ok) {
+                    return resp.text().then(errorMessage => {
+                        throw new Error(errorMessage);
+                    });
+                }
+            })
+            .then(data => {
+                // 인증에 성공
+                document.getElementById("email").readOnly = true;
+                document.getElementById("code").readOnly = true;
+                document.getElementById("send-email-btn").remove();
+                document.getElementById("verify-email-btn").remove();
+                document.getElementById("time-limit-description").innerText = "인증이 완료되었습니다.\n" +
+                    "10분 안에 구독신청을 해주세요";
+
+            })
+            .catch(error => {
+                const old = document.getElementById("code-error");
+                if (old) {
+                    old.remove();
+                }
+
+                const newDiv = document.createElement("div");
+                newDiv.classList.add("error");
+                newDiv.id = "code-error";
+                newDiv.innerText = error.message;
+
+                document.getElementById("code-wrap").appendChild(newDiv);
+            })
+    });
+
+
+
     document.getElementById("send-email-btn").addEventListener("click", () => {
         const input = {
             email: document.getElementById("email").value,
-        }
+        };
         fetch("/email/auth/send", {
             method: "POST",
             headers: {
@@ -46,12 +94,10 @@
                     return resp.text().then(errorMessage => {
                         throw new Error(errorMessage);
                     });
-                    return;
                 }
-
             })
             .then(data => {
-                document.getElementById("code-wrap").style.display='block';
+                document.getElementById("code-wrap").style.display = 'block';
             })
             .catch(error => {
                 const old = document.getElementById("email-error");
@@ -65,8 +111,9 @@
                 newDiv.innerText = error.message;
 
                 document.getElementById("email-wrap").appendChild(newDiv);
-            })
+            });
     });
+
 </script>
 </body>
 </html>

@@ -61,13 +61,25 @@ public class EmailController {
     }
 
     @PostMapping("/auth/verify")
-    public String verifyAuthCode(@Validated @ModelAttribute("emailDto") VerifyAuthCodeDto dto,
+    @ResponseBody
+    public ResponseEntity<List<String>> verifyAuthCode(@Validated @RequestBody VerifyAuthCodeDto dto,
                                  BindingResult bindingResult) {
+        List<FieldError> emailErrors = bindingResult.getFieldErrors();
+
         if (bindingResult.hasErrors()) {
-            return "email/register-form";
+
+            List<String> errorMessages = emailErrors.stream()
+                .map(error -> error.getDefaultMessage())
+                .collect(Collectors.toList());
+            return ResponseEntity.badRequest().body(errorMessages);
         }
-        emailService.verifyAuthCode(dto.getEmail(), dto.getCode());
-        return "redirect:/email/register";
+        try {
+            emailService.verifyAuthCode(dto.getEmail(), dto.getCode());
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(List.of(e.getMessage()));
+        }
+
     }
 
     @GetMapping("/delete")
