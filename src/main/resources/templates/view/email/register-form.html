@@ -61,8 +61,10 @@
                 // 인증에 성공
                 document.getElementById("email").readOnly = true;
                 document.getElementById("code").readOnly = true;
-                document.getElementById("send-email-btn").remove();
-                document.getElementById("verify-email-btn").remove();
+                document.getElementById("send-email-btn").disabled = true;
+                document.getElementById("verify-email-btn").disabled = true;
+                document.getElementById("send-email-btn").style.display = "none";
+                document.getElementById("verify-email-btn").style.display = "none";
                 document.getElementById("time-limit-description").innerText = "인증이 완료되었습니다.\n" +
                     "10분 안에 구독신청을 해주세요";
 
@@ -82,7 +84,12 @@
         document.getElementById("code-wrap").style.display = 'none';
         document.getElementById("email").readOnly = false;
         document.getElementById("email").value = "";
+
         document.getElementById("reenter-email-btn").style.display = 'none';
+        document.getElementById("send-email-btn").disabled = false;
+        document.getElementById("verify-email-btn").disabled = false;
+        document.getElementById("send-email-btn").style.display = "inline";
+        document.getElementById("verify-email-btn").style.display = "inline";
     });
 
     document.getElementById("send-email-btn").addEventListener("click", () => {
