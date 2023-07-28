@@ -3,11 +3,12 @@ package org.kimtaehoondev.jobpostingcollector.web.controller;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.kimtaehoondev.jobpostingcollector.email.auth.generator.AuthCodeGenerator;
 import org.kimtaehoondev.jobpostingcollector.web.dto.request.EmailDeleteDto;
 import org.kimtaehoondev.jobpostingcollector.web.dto.request.EmailRegisterDto;
 import org.kimtaehoondev.jobpostingcollector.web.dto.request.SendAuthCodeDto;
 import org.kimtaehoondev.jobpostingcollector.web.dto.request.VerifyAuthCodeDto;
-import org.kimtaehoondev.jobpostingcollector.email.service.EmailService;
+import org.kimtaehoondev.jobpostingcollector.email.service.EmailManagementService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,7 +26,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequiredArgsConstructor
 @RequestMapping("/email")
 public class EmailController {
-    private final EmailService emailService;
+    private final EmailManagementService emailManagementService;
+    private final AuthCodeGenerator authCodeGenerator;
+
 
     @GetMapping("/register")
     public String showRegisterForm(Model model) {
@@ -39,7 +42,7 @@ public class EmailController {
         if (bindingResult.hasErrors()) {
             return "email/register-form";
         }
-        emailService.register(dto);
+        emailManagementService.register(dto);
         return "redirect:/";
     }
 
@@ -55,7 +58,7 @@ public class EmailController {
         if (bindingResult.hasErrors()) {
             return "email/delete-form";
         }
-        emailService.delete(dto);
+        emailManagementService.delete(dto);
         return "redirect:/";
     }
 
@@ -71,7 +74,7 @@ public class EmailController {
                 .collect(Collectors.toList());
             return ResponseEntity.badRequest().body(errorMessages);
         }
-        emailService.sendAuthCode(dto.getEmail());
+        emailManagementService.sendAuthCode(dto.getEmail(), authCodeGenerator.generate());
         return ResponseEntity.ok().build();
     }
 
@@ -89,7 +92,7 @@ public class EmailController {
         }
 
         try {
-            emailService.verifyAuthCode(dto.getEmail(), dto.getCode());
+            emailManagementService.verifyAuthCode(dto.getEmail(), dto.getCode());
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(List.of(e.getMessage()));
