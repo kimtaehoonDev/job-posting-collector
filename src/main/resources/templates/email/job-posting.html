@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:each="posting : ${postings}">
+    <p>직종: <span th:text = "${posting.occupation}"/></p>
+    <p>회사명: <span th:text = "${posting.companyName}"/></p>
+    <p th:text="${posting.getLink().toString()}"></p>
+    <p th:text="${posting.getInfos()}"></p>
+<hr>
+</div>
+</body>
+</html>
