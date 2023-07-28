@@ -64,10 +64,9 @@ public class EmailController {
     @ResponseBody
     public ResponseEntity<List<String>> sendAuthCode(@Validated @RequestBody SendAuthCodeDto dto,
                                                      BindingResult bindingResult) {
-        List<FieldError> emailErrors = bindingResult.getFieldErrors("email");
-
-        if (!emailErrors.isEmpty()) {
-            List<String> errorMessages = emailErrors.stream()
+        List<FieldError> errors = bindingResult.getFieldErrors();
+        if (!errors.isEmpty()) {
+            List<String> errorMessages = errors.stream()
                 .map(error -> error.getDefaultMessage())
                 .collect(Collectors.toList());
             return ResponseEntity.badRequest().body(errorMessages);
@@ -76,13 +75,14 @@ public class EmailController {
         return ResponseEntity.ok().build();
     }
 
+    // TODO 어떻게 하면 앞단에서 편하게 사용할 수 있을까?
     @PostMapping("/auth/verify")
     @ResponseBody
     public ResponseEntity<List<String>> verifyAuthCode(@Validated @RequestBody VerifyAuthCodeDto dto,
                                                        BindingResult bindingResult) {
-        List<FieldError> emailErrors = bindingResult.getFieldErrors();
+        List<FieldError> errors = bindingResult.getFieldErrors();
         if (bindingResult.hasErrors()) {
-            List<String> errorMessages = emailErrors.stream()
+            List<String> errorMessages = errors.stream()
                 .map(error -> error.getDefaultMessage())
                 .collect(Collectors.toList());
             return ResponseEntity.badRequest().body(errorMessages);

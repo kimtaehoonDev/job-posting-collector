@@ -11,6 +11,7 @@
     <div id="email-wrap">
         <input type="email" th:field="*{email}" placeholder="이메일을 입력하세요" />
         <button type="button" id="send-email-btn">인증 메일 받기</button>
+        <button style="display: none" type="button" id="reenter-email-btn">이메일 다시 입력하기</button>
         <div class="error" th:errors="*{email}"></div>
     </div>
 
@@ -45,13 +46,18 @@
             body: JSON.stringify(input),
         })
             .then(resp => {
+                const old = document.getElementById("code-error");
+                if (old) {
+                    old.remove();
+                }
+
                 if (!resp.ok) {
                     return resp.text().then(errorMessage => {
                         throw new Error(errorMessage);
                     });
                 }
             })
-            .then(data => {
+            .then(() => {
                 // 인증에 성공
                 document.getElementById("email").readOnly = true;
                 document.getElementById("code").readOnly = true;
@@ -62,11 +68,6 @@
 
             })
             .catch(error => {
-                const old = document.getElementById("code-error");
-                if (old) {
-                    old.remove();
-                }
-
                 const newDiv = document.createElement("div");
                 newDiv.classList.add("error");
                 newDiv.id = "code-error";
@@ -76,7 +77,13 @@
             })
     });
 
-
+    document.getElementById("reenter-email-btn").addEventListener("click", () => {
+        document.getElementById("code-wrap").value = "";
+        document.getElementById("code-wrap").style.display = 'none';
+        document.getElementById("email").readOnly = false;
+        document.getElementById("email").value = "";
+        document.getElementById("reenter-email-btn").style.display = 'none';
+    });
 
     document.getElementById("send-email-btn").addEventListener("click", () => {
         const input = {
@@ -90,21 +97,23 @@
             body: JSON.stringify(input),
         })
             .then(resp => {
+                const old = document.getElementById("email-error");
+                if (old) {
+                    old.remove();
+                }
+
                 if (!resp.ok) {
                     return resp.text().then(errorMessage => {
                         throw new Error(errorMessage);
                     });
                 }
             })
-            .then(data => {
+            .then(() => {
                 document.getElementById("code-wrap").style.display = 'block';
+                document.getElementById("email").readOnly = true;
+                document.getElementById("reenter-email-btn").style.display = 'block';
             })
             .catch(error => {
-                const old = document.getElementById("email-error");
-                if (old) {
-                    old.remove();
-                }
-
                 const newDiv = document.createElement("div");
                 newDiv.classList.add("error");
                 newDiv.id = "email-error";
