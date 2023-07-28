@@ -1,4 +1,4 @@
-package org.kimtaehoondev.jobpostingcollector.controller;
+package org.kimtaehoondev.jobpostingcollector.web.controller;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;

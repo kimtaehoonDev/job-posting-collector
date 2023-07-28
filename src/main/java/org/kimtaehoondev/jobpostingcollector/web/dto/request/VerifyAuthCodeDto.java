@@ -1,4 +1,4 @@
-package org.kimtaehoondev.jobpostingcollector.email.dto.request;
+package org.kimtaehoondev.jobpostingcollector.web.dto.request;
 
 import javax.validation.constraints.NotEmpty;
 import lombok.Getter;

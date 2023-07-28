@@ -1,13 +1,12 @@
-package org.kimtaehoondev.jobpostingcollector.controller;
+package org.kimtaehoondev.jobpostingcollector.web.controller;
 
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.kimtaehoondev.jobpostingcollector.email.dto.request.EmailDeleteDto;
-import org.kimtaehoondev.jobpostingcollector.email.dto.request.EmailRegisterDto;
-import org.kimtaehoondev.jobpostingcollector.email.dto.request.EmailRequestDto;
-import org.kimtaehoondev.jobpostingcollector.email.dto.request.SendAuthCodeDto;
-import org.kimtaehoondev.jobpostingcollector.email.dto.request.VerifyAuthCodeDto;
+import org.kimtaehoondev.jobpostingcollector.web.dto.request.EmailDeleteDto;
+import org.kimtaehoondev.jobpostingcollector.web.dto.request.EmailRegisterDto;
+import org.kimtaehoondev.jobpostingcollector.web.dto.request.SendAuthCodeDto;
+import org.kimtaehoondev.jobpostingcollector.web.dto.request.VerifyAuthCodeDto;
 import org.kimtaehoondev.jobpostingcollector.email.service.EmailService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -30,7 +29,7 @@ public class EmailController {
 
     @GetMapping("/register")
     public String showRegisterForm(Model model) {
-        model.addAttribute("emailDto", new EmailRequestDto());
+        model.addAttribute("emailDto", new EmailRegisterDto());
         return "email/register-form";
     }
 
@@ -44,42 +43,7 @@ public class EmailController {
         return "redirect:/";
     }
 
-    @PostMapping("/auth/send")
-    @ResponseBody
-    public ResponseEntity<List<String>> sendAuthCode(@Validated @RequestBody SendAuthCodeDto dto,
-                                               BindingResult bindingResult) {
-        List<FieldError> emailErrors = bindingResult.getFieldErrors("email");
 
-        if (!emailErrors.isEmpty()) {
-            List<String> errorMessages = emailErrors.stream()
-                .map(error -> error.getDefaultMessage())
-                .collect(Collectors.toList());
-            return ResponseEntity.badRequest().body(errorMessages);
-        }
-        emailService.sendAuthCode(dto.getEmail());
-        return ResponseEntity.ok().build();
-    }
-
-    @PostMapping("/auth/verify")
-    @ResponseBody
-    public ResponseEntity<List<String>> verifyAuthCode(@Validated @RequestBody VerifyAuthCodeDto dto,
-                                 BindingResult bindingResult) {
-        List<FieldError> emailErrors = bindingResult.getFieldErrors();
-        if (bindingResult.hasErrors()) {
-            List<String> errorMessages = emailErrors.stream()
-                .map(error -> error.getDefaultMessage())
-                .collect(Collectors.toList());
-            return ResponseEntity.badRequest().body(errorMessages);
-        }
-
-        try {
-            emailService.verifyAuthCode(dto.getEmail(), dto.getCode());
-            return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(List.of(e.getMessage()));
-        }
-
-    }
 
     @GetMapping("/delete")
     public String showDeleteForm(Model model) {
@@ -97,4 +61,41 @@ public class EmailController {
         return "redirect:/";
     }
 
+
+    @PostMapping("/auth/send")
+    @ResponseBody
+    public ResponseEntity<List<String>> sendAuthCode(@Validated @RequestBody SendAuthCodeDto dto,
+                                                     BindingResult bindingResult) {
+        List<FieldError> emailErrors = bindingResult.getFieldErrors("email");
+
+        if (!emailErrors.isEmpty()) {
+            List<String> errorMessages = emailErrors.stream()
+                .map(error -> error.getDefaultMessage())
+                .collect(Collectors.toList());
+            return ResponseEntity.badRequest().body(errorMessages);
+        }
+        emailService.sendAuthCode(dto.getEmail());
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/auth/verify")
+    @ResponseBody
+    public ResponseEntity<List<String>> verifyAuthCode(@Validated @RequestBody VerifyAuthCodeDto dto,
+                                                       BindingResult bindingResult) {
+        List<FieldError> emailErrors = bindingResult.getFieldErrors();
+        if (bindingResult.hasErrors()) {
+            List<String> errorMessages = emailErrors.stream()
+                .map(error -> error.getDefaultMessage())
+                .collect(Collectors.toList());
+            return ResponseEntity.badRequest().body(errorMessages);
+        }
+
+        try {
+            emailService.verifyAuthCode(dto.getEmail(), dto.getCode());
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(List.of(e.getMessage()));
+        }
+
+    }
 }
