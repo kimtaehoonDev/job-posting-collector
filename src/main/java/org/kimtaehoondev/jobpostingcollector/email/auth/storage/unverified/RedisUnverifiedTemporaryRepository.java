@@ -1,21 +1,20 @@
 package org.kimtaehoondev.jobpostingcollector.email.auth.storage.unverified;
 
 import java.time.Duration;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 @Repository
-@RequiredArgsConstructor
 public class RedisUnverifiedTemporaryRepository implements UnverifiedTemporaryRepository {
     private final RedisTemplate<String, String> template;
+
+    public RedisUnverifiedTemporaryRepository(@Qualifier("redisTemplate")
+                                              RedisTemplate<String , String> template) {
+        this.template = template;
+    }
 
     @Override
     public String putAuthInfo(String key, String value) {
