@@ -5,9 +5,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import org.springframework.stereotype.Component;
 
-@Component
+//@Repository
 public class InMemoryUnverifiedTemporaryRepository implements UnverifiedTemporaryRepository {
     public static final int MINUTE = 60;
 
