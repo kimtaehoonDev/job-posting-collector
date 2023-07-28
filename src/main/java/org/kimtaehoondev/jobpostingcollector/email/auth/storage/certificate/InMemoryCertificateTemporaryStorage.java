@@ -1,4 +1,4 @@
-package org.kimtaehoondev.jobpostingcollector.email.auth.storage;
+package org.kimtaehoondev.jobpostingcollector.email.auth.storage.certificate;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -8,12 +8,13 @@ import java.util.Objects;
 import org.springframework.stereotype.Component;
 
 @Component
-public class InMemoryTemporaryStorage implements TemporaryStorage {
+public class InMemoryCertificateTemporaryStorage implements CertificateTemporaryStorage {
     public static final int MINUTE = 60;
 
     private final Map<String, Data> store = new HashMap<>();
+
     @Override
-    public String put(String key, String value) {
+    public String putAuthInfo(String key, String value) {
         Data old = getValidData(key);
 
         store.put(key, new Data(value));
@@ -56,7 +57,7 @@ public class InMemoryTemporaryStorage implements TemporaryStorage {
 
         public boolean isTimeout() {
             long secondGap = ChronoUnit.SECONDS.between(createdAt, LocalDateTime.now());
-            if (secondGap >= 3 * MINUTE) {
+            if (secondGap >= 10 * MINUTE) {
                 return true;
             }
             return false;

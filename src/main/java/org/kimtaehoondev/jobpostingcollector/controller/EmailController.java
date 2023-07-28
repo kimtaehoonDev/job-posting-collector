@@ -65,14 +65,13 @@ public class EmailController {
     public ResponseEntity<List<String>> verifyAuthCode(@Validated @RequestBody VerifyAuthCodeDto dto,
                                  BindingResult bindingResult) {
         List<FieldError> emailErrors = bindingResult.getFieldErrors();
-
         if (bindingResult.hasErrors()) {
-
             List<String> errorMessages = emailErrors.stream()
                 .map(error -> error.getDefaultMessage())
                 .collect(Collectors.toList());
             return ResponseEntity.badRequest().body(errorMessages);
         }
+
         try {
             emailService.verifyAuthCode(dto.getEmail(), dto.getCode());
             return ResponseEntity.ok().build();

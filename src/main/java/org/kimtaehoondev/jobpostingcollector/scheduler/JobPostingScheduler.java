@@ -18,11 +18,6 @@ public class JobPostingScheduler {
     private final JobPostingService jobPostingService;
     private final EmailService emailService;
 
-    @PostConstruct
-    void initData() {
-        updateServer();
-    }
-
     @Scheduled(cron = "0 30 6 * * ?")
     void executeRegularUpdate() {
         updateServer();
