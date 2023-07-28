@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.StringJoiner;
 import lombok.RequiredArgsConstructor;
 import org.kimtaehoondev.jobpostingcollector.email.EmailSender;
 import org.kimtaehoondev.jobpostingcollector.email.dto.response.EmailResponseDto;
@@ -14,7 +13,6 @@ import org.kimtaehoondev.jobpostingcollector.jobposting.dto.response.JobPostingR
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
-import org.thymeleaf.context.IContext;
 
 @Service
 @RequiredArgsConstructor
@@ -41,7 +39,15 @@ public class EmailSendingServiceImpl implements EmailSendingService {
     @Override
     public void sendAuthCode(String email, String authCode) {
         validateEmailDuplicated(email);
-        emailSender.sendHtml(email,"[채용 정보 크롤러] 인증 코드", "인증코드는 [" +authCode+"] 입니다");
+        String title = "[채용 정보 크롤러] 인증 코드";
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("code", authCode);
+        Context context = new Context(Locale.KOREAN, variables);
+        context.setVariable("title", title);
+        String message =
+            templateEngine.process("/email/auth-code.html", context);
+
+        emailSender.sendHtml(email,title, message);
     }
 
 
