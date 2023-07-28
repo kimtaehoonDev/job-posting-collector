@@ -33,14 +33,14 @@ public class EmailController {
     @GetMapping("/register")
     public String showRegisterForm(Model model) {
         model.addAttribute("emailDto", new EmailRegisterDto());
-        return "email/register-form";
+        return "view/email/register-form";
     }
 
     @PostMapping("/register")
     public String register(@Validated @ModelAttribute("emailDto") EmailRegisterDto dto,
                            BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "email/register-form";
+            return "view/email/register-form";
         }
         emailManagementService.register(dto);
         return "redirect:/";
@@ -49,14 +49,14 @@ public class EmailController {
     @GetMapping("/delete")
     public String showDeleteForm(Model model) {
         model.addAttribute("emailDto", new EmailDeleteDto());
-        return "email/delete-form";
+        return "view/email/delete-form";
     }
 
     @PostMapping("/delete")
     public String delete(@Validated @ModelAttribute("emailDto") EmailDeleteDto dto,
                          BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "email/delete-form";
+            return "view/email/delete-form";
         }
         emailManagementService.delete(dto);
         return "redirect:/";

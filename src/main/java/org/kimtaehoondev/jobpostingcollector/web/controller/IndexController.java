@@ -16,6 +16,6 @@ public class IndexController {
     String index(Model model) {
         List<JobPostingResponseDto> postings = jobPostingService.findAll();
         model.addAttribute("postings", postings);
-        return "index";
+        return "view/index";
     }
 }

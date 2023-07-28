@@ -7,7 +7,7 @@
 </head>
 <body>
 <h1>이메일 등록</h1>
-<form th:object="${emailDto}" th:method="post" th:action="@{/email/register}" id="register-form">
+<form th:object="${emailDto}" th:method="post" th:action="@{/templates/view/email/register}" id="register-form">
     <div id="email-wrap">
         <input type="email" th:field="*{email}" placeholder="이메일을 입력하세요" />
         <button type="button" id="send-email-btn">인증 메일 받기</button>

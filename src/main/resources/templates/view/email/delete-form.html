@@ -8,7 +8,7 @@
 <body>
 <hr>
 <h1>이메일 삭제</h1>
-<form th:object="${emailDto}" th:method="post" th:action="@{/email/delete}">
+<form th:object="${emailDto}" th:method="post" th:action="@{/templates/view/email/delete}">
     <input type="email" th:field="*{email}" placeholder="이메일을 입력하세요"/>
     <div class="error" th:errors="*{email}"></div>
 
