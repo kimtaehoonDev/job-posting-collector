@@ -38,8 +38,8 @@ public class RocketPunchCommunity implements JobPostingCommunity {
     }
 
     @Override
-    public List<WebElement> getJobPostingElements(WebDriver driver) {
-        return driver.findElements(By.cssSelector("#search-results .company"));
+    public String getJobPostingElementCssSelector() {
+        return "#search-results .company-list .company";
     }
 
     @Override

@@ -53,8 +53,8 @@ public class JobPlanetCommunity implements JobPostingCommunity {
     }
 
     @Override
-    public List<WebElement> getJobPostingElements(WebDriver driver) {
-        return driver.findElements(By.cssSelector(".recruitment-content .item-list .item-card"));
+    public String getJobPostingElementCssSelector() {
+        return "#JobPostingApp .recruitment-content .item-list .item-card";
     }
 
     @Override

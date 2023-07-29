@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 import org.kimtaehoondev.jobpostingcollector.exception.impl.ConnectException;
 import org.kimtaehoondev.jobpostingcollector.exception.impl.HttpParsingException;
 import org.kimtaehoondev.jobpostingcollector.jobposting.dto.request.JobPostingData;
+import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -26,12 +27,22 @@ public interface JobPostingCommunity {
 
     /**
      * 채용 공고를 확인하기 위한 페이지를 접속한다.
+     * url만으로 채용 공고 확인이 가능한 경우 구현하지 않는다
      */
     default void accessJobPostingPage(WebDriver driver) {
 
     }
 
-    List<WebElement> getJobPostingElements(WebDriver driver);
+    /**
+     * 각각의 채용공고 태그에 접근할 수 있는 CssSelector를 반환한다
+     */
+    String getJobPostingElementCssSelector();
+
+    default List<WebElement> getJobPostingElements(WebDriver driver) {
+        String selector = getJobPostingElementCssSelector();
+        return driver.findElements(By.cssSelector(selector));
+    }
+
 
     JobPostingData makeJobPostingFrom(WebElement element);
 
@@ -45,6 +56,7 @@ public interface JobPostingCommunity {
             driver.get(url);
             wait(url, 1000);
             accessJobPostingPage(driver);
+
             List<WebElement> elements = getJobPostingElements(driver);
             return elements.stream()
                 .map(this::makeJobPostingFrom)

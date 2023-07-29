@@ -80,8 +80,8 @@ public class WantedCommunity implements JobPostingCommunity {
     }
 
     @Override
-    public List<WebElement> getJobPostingElements(WebDriver driver) {
-        return driver.findElements(By.cssSelector(".List_List_container__JnQMS .Card_className__u5rsb"));
+    public String getJobPostingElementCssSelector() {
+        return ".List_List_container__JnQMS .Card_className__u5rsb";
     }
 
     @Override
