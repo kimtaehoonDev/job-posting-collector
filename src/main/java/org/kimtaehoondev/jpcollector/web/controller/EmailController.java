@@ -78,7 +78,6 @@ public class EmailController {
         return ResponseEntity.ok().build();
     }
 
-    // TODO 어떻게 하면 앞단에서 편하게 사용할 수 있을까?
     @PostMapping("/auth/verify")
     @ResponseBody
     public ResponseEntity<List<String>> verifyAuthCode(@Validated @RequestBody VerifyAuthCodeDto dto,

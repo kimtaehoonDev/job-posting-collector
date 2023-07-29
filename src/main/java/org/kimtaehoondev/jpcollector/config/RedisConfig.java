@@ -20,16 +20,21 @@ public class RedisConfig {
 
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
-        return new LettuceConnectionFactory(
-            new RedisStandaloneConfiguration(redisProperties.getHost(), redisProperties.getPort()));
+        RedisStandaloneConfiguration conf =
+            new RedisStandaloneConfiguration(redisProperties.getHost(), redisProperties.getPort());
+        conf.setPassword(redisProperties.getPassword());
+
+        return new LettuceConnectionFactory(conf);
     }
 
     @Bean
     public RedisConnectionFactory redisConnectionFactorySub() {
-        return new LettuceConnectionFactory(
-            new RedisStandaloneConfiguration(
-                redisCustomProperties.getHost(),
-                redisCustomProperties.getPort()));
+        RedisStandaloneConfiguration conf =
+            new RedisStandaloneConfiguration(redisCustomProperties.getHost(),
+                redisCustomProperties.getPort());
+        conf.setPassword(redisCustomProperties.getPassword());
+
+        return new LettuceConnectionFactory(conf);
     }
 
     @Bean // 디폴트
