@@ -18,7 +18,7 @@ public class JobPostingResponseDto {
 
     private JobPosting.Status status;
 
-    public static JobPostingResponseDto of(JobPosting jobPosting) {
+    public static JobPostingResponseDto from(JobPosting jobPosting) {
         String occupation = jobPosting.getOccupation();
         String companyName = jobPosting.getCompanyName();
         URL link = jobPosting.getLink();

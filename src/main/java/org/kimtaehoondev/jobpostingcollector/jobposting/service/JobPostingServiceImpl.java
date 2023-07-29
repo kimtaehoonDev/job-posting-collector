@@ -21,7 +21,7 @@ public class JobPostingServiceImpl implements JobPostingService {
     @Override
     public List<JobPostingResponseDto> findAll() {
         return jobPostingRepository.findAll().stream()
-            .map(JobPostingResponseDto::of)
+            .map(JobPostingResponseDto::from)
             .collect(Collectors.toList());
     }
 
