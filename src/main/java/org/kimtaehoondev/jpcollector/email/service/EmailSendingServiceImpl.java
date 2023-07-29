@@ -30,7 +30,7 @@ public class EmailSendingServiceImpl implements EmailSendingService {
         List<EmailResponseDto> total = emailRepository.findAllBy();
         for (EmailResponseDto emailResponseDto : total) {
             sendEmail(emailResponseDto.getEmail(), title,
-                "/email/job-posting.html", variables);
+                "email/job-posting.html", variables);
         }
     }
 
@@ -45,7 +45,7 @@ public class EmailSendingServiceImpl implements EmailSendingService {
         context.setVariable("title", title);
 
         sendEmail(email, title,
-            "/email/auth-code.html", variables);
+            "email/auth-code.html", variables);
     }
 
     private void sendEmail(String email, String title, String templatePath, Map<String, Object> variables) {
