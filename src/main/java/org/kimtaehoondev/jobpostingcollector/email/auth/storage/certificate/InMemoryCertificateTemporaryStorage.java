@@ -56,7 +56,7 @@ public class InMemoryCertificateTemporaryStorage implements CertificateTemporary
 
         public boolean isTimeout() {
             long secondGap = ChronoUnit.SECONDS.between(createdAt, LocalDateTime.now());
-            if (secondGap >= 10 * MINUTE) {
+            if (secondGap >= TIME_LIMIT * MINUTE) {
                 return true;
             }
             return false;

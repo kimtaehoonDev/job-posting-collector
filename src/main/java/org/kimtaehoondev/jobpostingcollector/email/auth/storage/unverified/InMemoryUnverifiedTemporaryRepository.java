@@ -56,7 +56,7 @@ public class InMemoryUnverifiedTemporaryRepository implements UnverifiedTemporar
 
         public boolean isTimeout() {
             long secondGap = ChronoUnit.SECONDS.between(createdAt, LocalDateTime.now());
-            if (secondGap >= 3 * MINUTE) {
+            if (secondGap >= TIME_LIMIT * MINUTE) {
                 return true;
             }
             return false;

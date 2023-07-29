@@ -20,7 +20,7 @@ public class RedisUnverifiedTemporaryRepository implements UnverifiedTemporaryRe
     public String putAuthInfo(String key, String value) {
         ValueOperations<String, String> operations = template.opsForValue();
         String old = operations.get(key);
-        operations.set(key,value, Duration.ofMinutes(3));
+        operations.set(key,value, Duration.ofMinutes(TIME_LIMIT));
         return old;
     }
 

@@ -20,7 +20,7 @@ public class RedisCertificateTemporaryRepository implements CertificateTemporary
     public String putAuthInfo(String key, String value) {
         ValueOperations<String, String> operations = template.opsForValue();
         String old = operations.get(key);
-        operations.set(key, value, Duration.ofMinutes(10));
+        operations.set(key, value, Duration.ofMinutes(TIME_LIMIT));
         return old;
     }
 
