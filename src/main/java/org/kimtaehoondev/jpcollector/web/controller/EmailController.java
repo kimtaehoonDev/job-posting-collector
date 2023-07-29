@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.kimtaehoondev.jpcollector.email.auth.generator.AuthCodeGenerator;
+import org.kimtaehoondev.jpcollector.exception.impl.EmailNotFoundException;
+import org.kimtaehoondev.jpcollector.exception.impl.EmailPasswordInvalidException;
+import org.kimtaehoondev.jpcollector.exception.impl.EmailUnAuthorizedException;
 import org.kimtaehoondev.jpcollector.web.dto.request.EmailDeleteDto;
 import org.kimtaehoondev.jpcollector.web.dto.request.EmailRegisterDto;
 import org.kimtaehoondev.jpcollector.web.dto.request.SendAuthCodeDto;
@@ -42,8 +45,13 @@ public class EmailController {
         if (bindingResult.hasErrors()) {
             return "view/email/register-form";
         }
-        emailManagementService.register(dto);
-        return "redirect:/";
+        try {
+            emailManagementService.register(dto);
+            return "redirect:/";
+        } catch (EmailUnAuthorizedException e) {
+            bindingResult.addError(new FieldError("emailDto","pwd", e.getMessage()));
+            return "view/email/register-form";
+        }
     }
 
     @GetMapping("/delete")
@@ -58,8 +66,16 @@ public class EmailController {
         if (bindingResult.hasErrors()) {
             return "view/email/delete-form";
         }
-        emailManagementService.delete(dto);
-        return "redirect:/";
+        try {
+            emailManagementService.delete(dto);
+            return "redirect:/";
+        } catch (EmailPasswordInvalidException e) {
+            bindingResult.addError(new FieldError("emailDto","pwd", e.getMessage()));
+            return "view/email/delete-form";
+        } catch (EmailNotFoundException e) {
+            bindingResult.addError(new FieldError("emailDto","email", e.getMessage()));
+            return "view/email/delete-form";
+        }
     }
 
 
