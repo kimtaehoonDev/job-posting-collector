@@ -24,7 +24,10 @@ public interface JobPostingCommunity {
      */
     boolean isConnected();
 
-    default void process(WebDriver driver) {
+    /**
+     * 채용 공고를 확인하기 위한 페이지를 접속한다.
+     */
+    default void accessJobPostingPage(WebDriver driver) {
 
     }
 
@@ -41,7 +44,7 @@ public interface JobPostingCommunity {
             String url = getUrl();
             driver.get(url);
             wait(url, 1000);
-            process(driver);
+            accessJobPostingPage(driver);
             List<WebElement> elements = getJobPostingElements(driver);
             return elements.stream()
                 .map(this::makeJobPostingFrom)

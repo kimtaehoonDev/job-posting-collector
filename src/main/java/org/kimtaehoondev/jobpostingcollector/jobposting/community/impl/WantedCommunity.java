@@ -41,7 +41,7 @@ public class WantedCommunity implements JobPostingCommunity {
     }
 
     @Override
-    public void process(WebDriver driver) {
+    public void accessJobPostingPage(WebDriver driver) {
         try {
             applyStackFilter(driver);
         } catch (InterruptedException e) {

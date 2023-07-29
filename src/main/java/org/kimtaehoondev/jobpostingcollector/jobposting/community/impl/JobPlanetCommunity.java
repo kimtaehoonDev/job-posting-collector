@@ -42,7 +42,7 @@ public class JobPlanetCommunity implements JobPostingCommunity {
     }
 
     @Override
-    public void process(WebDriver driver) {
+    public void accessJobPostingPage(WebDriver driver) {
         try {
             applyOccupationFilter(driver);
             applyYearsOfExperienceFilter(driver);
