@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.kimtaehoondev.jobpostingcollector.email.EmailSender;
 import org.kimtaehoondev.jobpostingcollector.email.dto.response.EmailResponseDto;
 import org.kimtaehoondev.jobpostingcollector.email.repository.EmailRepository;
+import org.kimtaehoondev.jobpostingcollector.exception.impl.EmailDuplicateException;
 import org.kimtaehoondev.jobpostingcollector.jobposting.dto.response.JobPostingResponseDto;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
@@ -36,7 +37,6 @@ public class EmailSendingServiceImpl implements EmailSendingService {
 
     @Override
     public void sendAuthCode(String email, String authCode) {
-        validateEmailDuplicated(email);
         String title = "[채용 정보 크롤러] 인증 코드";
 
         Map<String, Object> variables = new HashMap<>();
@@ -55,12 +55,5 @@ public class EmailSendingServiceImpl implements EmailSendingService {
 
         String message = templateEngine.process(templatePath, context);
         emailSender.sendHtml(email, title, message);
-    }
-
-    private void validateEmailDuplicated(String email) {
-        boolean isDuplicated = emailRepository.existsByEmail(email);
-        if (isDuplicated) {
-            throw new RuntimeException("중복된 아이디");
-        }
     }
 }
