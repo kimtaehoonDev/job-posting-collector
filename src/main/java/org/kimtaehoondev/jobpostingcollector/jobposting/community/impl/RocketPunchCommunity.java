@@ -13,12 +13,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class RocketPunchCommunity implements JobPostingCommunity {
-    private JobPostingCommunityType communityType = JobPostingCommunityType.ROCKET_PUNCH;
     private Status status = Status.GOOD;
 
     @Override
     public JobPostingCommunityType getCommunityType() {
-        return communityType;
+        return JobPostingCommunityType.ROCKET_PUNCH;
     }
 
     @Override
@@ -43,37 +42,23 @@ public class RocketPunchCommunity implements JobPostingCommunity {
     }
 
     @Override
-    public JobPostingData makeJobPostingFrom(WebElement element) {
-        JobPostingData.JobPostingDataBuilder builder = JobPostingData.builder();
-
-        String companyName =
-            element.findElement(By.cssSelector(".company-name a")).getText().trim();
-        builder.companyName(companyName);
-
-        String occupation =
-            element.findElement(By.cssSelector(".company-jobs-detail .job-name")).getText().trim();
-        builder.occupation(occupation);
-
-        String linkString = element.findElement(By.cssSelector(".company-jobs-detail .job-name a"))
-            .getAttribute("href");
-        builder.link(UrlParser.parse(linkString));
-
-        List<String> infos = makeInfos(element);
-        builder.infos(infos);
-
-        builder.communityType(communityType);
-        return builder.build();
+    public String getLinkCssSelector() {
+        return ".company-jobs-detail .job-name a";
     }
 
-    private List<String> makeInfos(WebElement element) {
-        List<String> infos = new ArrayList<>();
-
-        element.findElements(By.cssSelector(".job-badges .reward-banner span")).stream()
-            .map(each -> each.getText().trim())
-            .forEach(infos::add);
-        element.findElements(By.cssSelector(".job-badges .label div")).stream()
-            .map(each -> each.getText().trim())
-            .forEach(infos::add);
-        return infos;
+    @Override
+    public String getOccupationCssSelector() {
+        return ".company-jobs-detail .job-name";
     }
+
+    @Override
+    public String getCompanyCssSelector() {
+        return ".company-name a";
+    }
+
+    @Override
+    public List<String> getInfoListCssSelector() {
+        return List.of(".job-badges .reward-banner span", ".job-badges .label div");
+    }
+
 }

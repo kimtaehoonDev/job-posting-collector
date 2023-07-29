@@ -85,32 +85,22 @@ public class WantedCommunity implements JobPostingCommunity {
     }
 
     @Override
-    public JobPostingData makeJobPostingFrom(WebElement element) {
-        JobPostingData.JobPostingDataBuilder builder = JobPostingData.builder();
+    public String getLinkCssSelector() {
+        return "a";
+    }
 
-        String linkString = element.findElement(By.tagName("a")).getAttribute("href");
-        builder.link(UrlParser.parse(linkString));
+    @Override
+    public String getOccupationCssSelector() {
+        return ".body .job-card-position";
+    }
 
-        List<WebElement> infosInElement = element.findElements(By.cssSelector(".body div"));
+    @Override
+    public String getCompanyCssSelector() {
+        return ".body .job-card-company-name";
+    }
 
-        List<String> infos = new ArrayList<>();
-        for (WebElement each : infosInElement) {
-            String classValue = each.getAttribute("class");
-            if (classValue.contains("job-card-position")) {
-                builder.occupation(each.getText());
-                continue;
-            }
-            if (classValue.contains("job-card-company-name")) {
-                builder.companyName(each.getText());
-                continue;
-            }
-            if (!each.getText().isBlank()) {
-                infos.add(each.getText());
-            }
-        }
-        builder.infos(infos);
-
-        builder.communityType(communityType);
-        return builder.build();
+    @Override
+    public List<String> getInfoListCssSelector() {
+        return List.of(".body div:not(.job-card-position):not(.job-card-company-name)");
     }
 }

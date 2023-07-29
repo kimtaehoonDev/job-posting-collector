@@ -1,10 +1,12 @@
 package org.kimtaehoondev.jobpostingcollector.jobposting.community;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.kimtaehoondev.jobpostingcollector.exception.impl.ConnectException;
 import org.kimtaehoondev.jobpostingcollector.exception.impl.HttpParsingException;
 import org.kimtaehoondev.jobpostingcollector.jobposting.dto.request.JobPostingData;
+import org.kimtaehoondev.jobpostingcollector.utils.UrlParser;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
@@ -43,8 +45,47 @@ public interface JobPostingCommunity {
         return driver.findElements(By.cssSelector(selector));
     }
 
+    default JobPostingData makeJobPostingFrom(WebElement element) {
+        JobPostingData.JobPostingDataBuilder builder = JobPostingData.builder();
 
-    JobPostingData makeJobPostingFrom(WebElement element);
+        String companyName =
+            element.findElement(By.cssSelector(getCompanyCssSelector())).getText().trim();
+        builder.companyName(companyName);
+
+        String occupation =
+            element.findElement(By.cssSelector(getOccupationCssSelector())).getText().trim();
+        builder.occupation(occupation);
+
+        String linkString =
+            element.findElement(By.cssSelector(getLinkCssSelector())).getAttribute("href");
+        builder.link(UrlParser.parse(linkString));
+
+        List<String> infos = makeInfos(element);
+        builder.infos(infos);
+
+        builder.communityType(getCommunityType());
+        return builder.build();
+    }
+
+    String getLinkCssSelector();
+
+    String getOccupationCssSelector();
+
+    String getCompanyCssSelector();
+
+    List<String> getInfoListCssSelector();
+
+    default List<String> makeInfos(WebElement element) {
+        List<String> infos = new ArrayList<>();
+
+        List<String> cssSelectors = getInfoListCssSelector();
+        for (String cssSelector : cssSelectors) {
+            element.findElements(By.cssSelector(cssSelector)).stream()
+                .map(each -> each.getText().trim())
+                .forEach(infos::add);
+        }
+        return infos;
+    }
 
     default List<JobPostingData> scrap(WebDriver driver) {
         if (!isConnected()) {

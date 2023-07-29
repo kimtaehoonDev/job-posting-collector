@@ -58,38 +58,24 @@ public class JobPlanetCommunity implements JobPostingCommunity {
     }
 
     @Override
-    public JobPostingData makeJobPostingFrom(WebElement element) {
-        JobPostingData.JobPostingDataBuilder builder = JobPostingData.builder();
+    public String getLinkCssSelector() {
+        return "a";
+    }
 
-        String linkString = element.findElement(By.tagName("a")).getAttribute("href");
-        builder.link(UrlParser.parse(linkString));
+    @Override
+    public String getOccupationCssSelector() {
+        return ".item-card__information .item-card__title";
+    }
 
-        WebElement occupation =
-            element.findElement(By.cssSelector(".item-card__information .item-card__title"));
-        builder.occupation(occupation.getText());
+    @Override
+    public String getCompanyCssSelector() {
+        return ".item-card__information .item-card__company .item-card__name";
+    }
 
-        WebElement company =
-            element.findElement(By.cssSelector(".item-card__information .item-card__company .item-card__name"));
-        builder.companyName(company.getText());
-
-        List<String> infos = new ArrayList<>();
-
-        WebElement skill =
-            element.findElement(By.cssSelector(".item-card__information .item-card__skill"));
-        infos.add(skill.getText());
-
-        WebElement welfare =
-            element.findElement(By.cssSelector(".item-card__information .item-card__welfare"));
-        infos.add(welfare.getText());
-
-        WebElement reward =
-            element.findElement(By.cssSelector(".item-card__information .item-card__reward"));
-        infos.add(reward.getText());
-
-        builder.infos(infos);
-
-        builder.communityType(communityType);
-        return builder.build();
+    @Override
+    public List<String> getInfoListCssSelector() {
+        return List.of(".item-card__information .item-card__skill",
+            ".item-card__information .item-card__reward");
     }
 
     @Override
