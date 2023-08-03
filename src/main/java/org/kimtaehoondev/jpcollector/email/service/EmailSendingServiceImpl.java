@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import org.kimtaehoondev.jpcollector.config.AdminProperties;
 import org.kimtaehoondev.jpcollector.email.EmailSender;
 import org.kimtaehoondev.jpcollector.email.dto.response.EmailResponseDto;
 import org.kimtaehoondev.jpcollector.email.repository.EmailRepository;
@@ -20,17 +21,26 @@ public class EmailSendingServiceImpl implements EmailSendingService {
     private final EmailRepository emailRepository;
     private final TemplateEngine templateEngine;
     private final EmailSender emailSender;
+    private final AdminProperties adminProperties;
 
     @Override
     public void sendJobPostings(List<JobPostingResponseDto> jobPostings) {
         String title = LocalDate.now() + "일자 채용 안내 - 김태훈";
+        String path = "email/job-posting.html";
+
         Map<String, Object> variables = new HashMap<>();
+        variables.put("postings", jobPostings);
+
+        if (jobPostings.isEmpty()) {
+            path = "email/job-posting-empty.html";
+            variables.put("url", adminProperties.getUrl());
+        }
+
         variables.put("postings", jobPostings);
 
         List<EmailResponseDto> total = emailRepository.findAllBy();
         for (EmailResponseDto emailResponseDto : total) {
-            sendEmail(emailResponseDto.getEmail(), title,
-                "email/job-posting.html", variables);
+            sendEmail(emailResponseDto.getEmail(), title, path, variables);
         }
     }
 

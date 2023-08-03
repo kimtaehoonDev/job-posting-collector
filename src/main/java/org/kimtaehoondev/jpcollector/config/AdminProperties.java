@@ -11,4 +11,5 @@ import org.springframework.stereotype.Component;
 @Setter
 public class AdminProperties {
     private String email;
+    private String url;
 }
