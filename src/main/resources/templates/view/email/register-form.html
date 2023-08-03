@@ -32,6 +32,23 @@
 <hr>
 
 <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById("email").addEventListener("keydown", (event) => {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                document.getElementById("send-email-btn").click();
+            }
+        });
+
+        document.getElementById("code").addEventListener("keydown", (event) => {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                document.getElementById("verify-email-btn").click();
+            }
+        });
+
+    });
+
     document.getElementById("verify-email-btn").addEventListener("click", () => {
         const input = {
             email: document.getElementById("email").value,
@@ -67,7 +84,7 @@
                 document.getElementById("verify-email-btn").style.display = "none";
                 document.getElementById("time-limit-description").innerText = "인증이 완료되었습니다.\n" +
                     "10분 안에 구독신청을 해주세요";
-
+                document.getElementById("pwd").focus();
             })
             .catch(error => {
                 const newDiv = document.createElement("div");
@@ -76,7 +93,8 @@
                 newDiv.innerText = error.message;
 
                 document.getElementById("code-wrap").appendChild(newDiv);
-            })
+                document.getElementById("email").focus();
+            });
     });
 
     document.getElementById("reenter-email-btn").addEventListener("click", () => {
