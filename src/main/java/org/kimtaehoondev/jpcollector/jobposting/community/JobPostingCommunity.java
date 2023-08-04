@@ -8,6 +8,7 @@ import org.kimtaehoondev.jpcollector.exception.impl.HttpParsingException;
 import org.kimtaehoondev.jpcollector.jobposting.dto.request.JobPostingData;
 import org.kimtaehoondev.jpcollector.utils.UrlParser;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -97,6 +98,7 @@ public interface JobPostingCommunity {
             driver.get(url);
             wait(url, 1000);
             accessJobPostingPage(driver);
+            doScrollDown((JavascriptExecutor) driver, 5);
 
             List<WebElement> elements = getJobPostingElements(driver);
             return elements.stream()
@@ -108,13 +110,24 @@ public interface JobPostingCommunity {
         }
     }
 
+    private static void doScrollDown(JavascriptExecutor driver, int scrollDownCnt) {
+        for (int i = 0; i < scrollDownCnt; i++) {
+            try {
+                Thread.sleep(2000);
+                driver.executeScript(
+                    "window.scrollTo(0, document.body.scrollHeight);");
+            } catch (InterruptedException e) {
+                throw new RuntimeException("시간초과입니다");
+            }
+        }
+    }
+
     default boolean filter(JobPostingData jobPostingData) {
         return true;
     }
 
     private void wait(String urlString, int millis) {
         try {
-            // TODO 대기 방식 가능하면 명시적으로 변경
             Thread.sleep(millis);
         } catch (InterruptedException e) {
             throw new RuntimeException(urlString + "시간초과입니다");
