@@ -4,6 +4,7 @@ import java.time.Duration;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.kimtaehoondev.jpcollector.exception.impl.ElementNotFoundException;
+import org.kimtaehoondev.jpcollector.exception.impl.ThreadNotWorkingException;
 import org.kimtaehoondev.jpcollector.jobposting.community.JobPostingCommunity;
 import org.kimtaehoondev.jpcollector.jobposting.community.JobPostingCommunityType;
 import org.kimtaehoondev.jpcollector.jobposting.dto.request.JobPostingData;
@@ -34,7 +35,6 @@ public class JobPlanetCommunity implements JobPostingCommunity {
 
     @Override
     public boolean isConnected() {
-        // TODO
         return true;
     }
 
@@ -43,14 +43,17 @@ public class JobPlanetCommunity implements JobPostingCommunity {
         return Status.BAD == status;
     }
 
+    /**
+     * JobPlanet 채용공고에 접근하기 위해 직업과 경력 필터를 조작합니다.
+     */
     @Override
     public void accessJobPostingPage(WebDriver driver) {
         try {
             applyOccupationFilter(driver);
             applyYearsOfExperienceFilter(driver);
         } catch (InterruptedException e) {
-            log.error("스레드 sleep에 문제가 발생했습니다");
-            throw new RuntimeException(e);
+            Thread.currentThread().interrupt();
+            throw new ThreadNotWorkingException();
         }
     }
 
@@ -80,17 +83,20 @@ public class JobPlanetCommunity implements JobPostingCommunity {
             ".item-card__information .item-card__reward");
     }
 
+    /**
+     * spring 혹은 java가 적혀있는 채용공고만을 반환합니다
+     *
+     * @param jobPostingData
+     * @return
+     */
     @Override
     public boolean filter(JobPostingData jobPostingData) {
-        if (jobPostingData.isIncludeInfo("spring") || jobPostingData.isIncludeInfo("java")) {
-            return true;
-        }
-        return false;
+        return jobPostingData.isIncludeInfo("spring") || jobPostingData.isIncludeInfo("java");
     }
 
     private void applyYearsOfExperienceFilter(WebDriver driver) throws InterruptedException {
         try {
-            log.info("잡플래닛 경험 필터를 적용합니다");
+            log.info("applyYearsOfExperienceFilter 메서드를 실행합니다");
 
             // 경험 필터를 여는 버튼을 클릭합니다
             WebElement filterOpenBtn = findElement(driver,
@@ -117,14 +123,15 @@ public class JobPlanetCommunity implements JobPostingCommunity {
 
             // 적용 버튼을 찾아 클릭합니다
             WebElement applyBtn =
-                driver.findElements(By.cssSelector("#years_of_experience_filter .panel_bottom button"))
+                driver.findElements(
+                        By.cssSelector("#years_of_experience_filter .panel_bottom button"))
                     .stream().filter(btn -> btn.getText().trim().equals("적용"))
                     .findAny()
                     .orElseThrow(ElementNotFoundException::new);
             applyBtn.click();
 
             // 적용되기를 기다립니다.
-            Thread.sleep(1000);// TODO 가능하면 명시적으로 변경
+            Thread.sleep(WAITING_MILLISECOND);
         } catch (ElementNotFoundException e) {
             log.error("applyYearsOfExperienceFilter 메서드에서 + {}", e.getMessage());
             throw e;
@@ -133,39 +140,38 @@ public class JobPlanetCommunity implements JobPostingCommunity {
 
     private void applyOccupationFilter(WebDriver driver) throws InterruptedException {
         try {
-            log.info("잡플래닛 직업 필터를 적용합니다");
+            log.info("applyOccupationFilter 메서드를 실행합니다");
 
             // 직업 필터를 여는 버튼을 클릭합니다
             WebElement filterOpenBtn = findElement(driver,
                 By.cssSelector("#occupation_level1_filter .filter_item .btn_filter button"));
             filterOpenBtn.click();
 
-            clickOccupationFirstDepthBtn(driver);
-            clickOccupationSecondDepthBtn(driver);
+            WebDriverWait wait = clickOccupationFirstDepthBtn(driver);
+
+            clickOccupationSecondDepthBtn(wait);
 
             // 적용 버튼 누르기
-            WebElement applyBtn =
-                driver.findElements(By.cssSelector("#occupation_level1_filter .panel_bottom button"))
-                    .stream()
-                    .filter(btn -> btn.getText().trim().equals("적용"))
-                    .findAny()
-                    .orElseThrow(ElementNotFoundException::new);
+            WebElement applyBtn = driver.findElements(
+                    By.cssSelector("#occupation_level1_filter .panel_bottom button"))
+                .stream()
+                .filter(btn -> btn.getText().trim().equals("적용"))
+                .findAny()
+                .orElseThrow(ElementNotFoundException::new);
             applyBtn.click();
-            Thread.sleep(1000);// TODO 가능하면 명시적으로 변경
 
+            // 결과가 나오길 기다립니다
+            Thread.sleep(WAITING_MILLISECOND);
         } catch (ElementNotFoundException e) {
             log.error("applyOccupationFilter 메서드에서 + {}", e.getMessage());
             throw e;
         }
     }
 
-    private static void clickOccupationSecondDepthBtn(WebDriver driver) {
+    private static void clickOccupationSecondDepthBtn(WebDriverWait wait) {
         WebElement depth2Container;
 
         try {
-            // depth2Container가 나올 떄까지 기다린다
-            WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(10000));
-
             // depth2Container를 꺼낸다
             depth2Container = wait.until(ExpectedConditions.presenceOfElementLocated(
                 By.cssSelector("#occupation_level1_filter .filter_depth2 .jply_checkbox_list")));
@@ -186,14 +192,14 @@ public class JobPlanetCommunity implements JobPostingCommunity {
         throw new ElementNotFoundException();
     }
 
-    private static void clickOccupationFirstDepthBtn(WebDriver driver) {
+    private static WebDriverWait clickOccupationFirstDepthBtn(WebDriver driver) {
         List<WebElement> depth1Btns =
             driver.findElements(
                 By.cssSelector(".filter_depth1_list .filter_depth1_item .filter_depth1_btn"));
         for (WebElement depth1Btn : depth1Btns) {
             if (depth1Btn.getText().trim().equals("개발")) {
                 depth1Btn.click();
-                return;
+                return new WebDriverWait(driver, Duration.ofMillis(WAITING_MILLISECOND));
             }
         }
         throw new ElementNotFoundException();

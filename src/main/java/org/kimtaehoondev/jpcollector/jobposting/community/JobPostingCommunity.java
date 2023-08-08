@@ -26,13 +26,13 @@ public interface JobPostingCommunity {
 
     // TODO
     /**
-     * 미리 요청을 보내본 뒤, 서버가 연결가능한지 확인한다
+     * 미리 요청을 보내본 뒤, 서버가 연결가능한지 확인합니다
      */
     boolean isConnected();
 
     /**
-     * 채용 공고를 확인하기 위한 페이지를 접속한다.
-     * url만으로 채용 공고 확인이 가능한 경우 구현하지 않는다
+     * 채용 공고를 확인하기 위한 페이지를 접속합니다.
+     * url만으로 채용 공고 확인이 가능한 경우 구현하지 않습니다.
      */
     default void accessJobPostingPage(WebDriver driver) {
 
@@ -42,6 +42,35 @@ public interface JobPostingCommunity {
      * 각각의 채용공고 태그에 접근할 수 있는 CssSelector를 반환한다
      */
     String getJobPostingElementCssSelector();
+
+    /**
+     * 사이트에 접속해 JobPostingData를 List로 가져옵니다. 순서는 다음과 같습니다.
+     * 1. 인터넷 창을 엽니다.
+     * 2. 채용공고에 접근하기 위해 화면을 조작합니다.
+     * (1번 만으로 데이터에 접근이 가능하다면, 해당 단계는 생략이 가능합니다)
+     * 3. 무한스크롤을 처리하기 위해 스크롤을 하단으로 내립니다.
+     * 4. 각각의 채용공고에 접근할 수 있는 List<WebElement>를 가져옵니다.
+     * 5. WebElement를 JobPostingData로 변환한 뒤 결과를 반환합니다
+     */
+    default List<JobPostingData> scrap(WebDriver driver) {
+        if (!isConnected()) {
+            throw new ConnectException(getUrl());
+        }
+        try {
+            openInternetWindow(driver);
+            accessJobPostingPage(driver);
+            doScrollDown((JavascriptExecutor) driver, 5);
+
+            List<WebElement> elements = getJobPostingElements(driver);
+            return elements.stream()
+                .map(this::makeJobPostingFrom)
+                .filter(this::filter)
+                .collect(Collectors.toList());
+        } catch (NoSuchElementException e) {
+            throw new ElementNotFoundException();
+        }
+    }
+
 
     default List<WebElement> getJobPostingElements(WebDriver driver) {
         String selector = getJobPostingElementCssSelector();
@@ -88,34 +117,6 @@ public interface JobPostingCommunity {
                 .forEach(infos::add);
         }
         return infos;
-    }
-
-    /**
-     * 사이트에 접속해 JobPostingData를 List로 가져옵니다. 순서는 다음과 같습니다.
-     * 1. 인터넷 창을 엽니다.
-     * 2. 채용공고에 접근하기 위해 화면을 조작합니다.
-     * (1번 만으로 데이터에 접근이 가능하다면, 해당 단계는 생략이 가능합니다)
-     * 3. 무한스크롤을 처리하기 위해 스크롤을 하단으로 내립니다.
-     * 4. 각각의 채용공고에 접근할 수 있는 List<WebElement>를 가져옵니다.
-     * 5. WebElement를 JobPostingData로 변환한 뒤 결과를 반환합니다
-     */
-    default List<JobPostingData> scrap(WebDriver driver) {
-        if (!isConnected()) {
-            throw new ConnectException(getUrl());
-        }
-        try {
-            openInternetWindow(driver);
-            accessJobPostingPage(driver);
-            doScrollDown((JavascriptExecutor) driver, 5);
-
-            List<WebElement> elements = getJobPostingElements(driver);
-            return elements.stream()
-                .map(this::makeJobPostingFrom)
-                .filter(this::filter)
-                .collect(Collectors.toList());
-        } catch (NoSuchElementException e) {
-            throw new ElementNotFoundException();
-        }
     }
 
     // TODO 발생가능 오류. url이 없거나, 접속이 불가능하거나 쓰레드가 오류 생기거나
