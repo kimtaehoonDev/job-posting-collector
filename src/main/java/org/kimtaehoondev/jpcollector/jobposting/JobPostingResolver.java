@@ -4,40 +4,52 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.kimtaehoondev.jpcollector.jobposting.dto.response.JobPostingCrawlingResult;
+import lombok.extern.slf4j.Slf4j;
 import org.kimtaehoondev.jpcollector.exception.impl.ConnectException;
+import org.kimtaehoondev.jpcollector.exception.impl.ElementNotFoundException;
 import org.kimtaehoondev.jpcollector.exception.impl.HttpParsingException;
+import org.kimtaehoondev.jpcollector.factory.WebDriverFactory;
 import org.kimtaehoondev.jpcollector.jobposting.community.JobPostingCommunity;
 import org.kimtaehoondev.jpcollector.jobposting.dto.request.JobPostingData;
+import org.kimtaehoondev.jpcollector.jobposting.dto.response.JobPostingCrawlingResult;
 import org.openqa.selenium.WebDriver;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class JobPostingResolver {
-    private final WebDriver driver;
+    private final WebDriverFactory webDriverFactory;
     private final List<JobPostingCommunity> communities;
+    // TODO 웹드라이버팩톨리 만들기
 
     public List<JobPostingCrawlingResult> crawling() {
+        log.info("크롤링을 시작합니다");
         List<JobPostingCrawlingResult> total = new ArrayList<>();
+        WebDriver webDriver = webDriverFactory.make();
         for (JobPostingCommunity community : communities) {
-            List<JobPostingData> postings = scrap(community);
+            List<JobPostingData> postings = scrap(webDriver, community);
             if (community.isStatusBad()) {
                 continue;
             }
             total.add(new JobPostingCrawlingResult(community, postings));
         }
+
+        log.info("창을 닫습니다");
+        webDriver.close();
         return total;
     }
 
-    private List<JobPostingData> scrap(JobPostingCommunity community) {
+    private List<JobPostingData> scrap(WebDriver webDriver, JobPostingCommunity community) {
         try {
-            List<JobPostingData> result = community.scrap(driver);
+            List<JobPostingData> result = community.scrap(webDriver);
             community.changeStatus(JobPostingCommunity.Status.GOOD);
             return result;
-        } catch (HttpParsingException | ConnectException e) {
+        } catch (HttpParsingException | ConnectException | ElementNotFoundException e) {
+            log.info("{} 크롤링에 실패했습니다", community.getCommunityType().name());
             community.changeStatus(JobPostingCommunity.Status.BAD);
             return Collections.emptyList();
         }
     }
+
 }

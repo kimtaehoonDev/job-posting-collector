@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.kimtaehoondev.jpcollector.exception.impl.ConnectException;
+import org.kimtaehoondev.jpcollector.exception.impl.ElementNotFoundException;
 import org.kimtaehoondev.jpcollector.exception.impl.HttpParsingException;
 import org.kimtaehoondev.jpcollector.jobposting.dto.request.JobPostingData;
 import org.kimtaehoondev.jpcollector.utils.UrlParser;
@@ -101,13 +102,23 @@ public interface JobPostingCommunity {
             doScrollDown((JavascriptExecutor) driver, 5);
 
             List<WebElement> elements = getJobPostingElements(driver);
-            return elements.stream()
+
+            List<JobPostingData> result = elements.stream()
                 .map(this::makeJobPostingFrom)
                 .filter(this::filter)
                 .collect(Collectors.toList());
+            return result;
         } catch (NoSuchElementException e) {
             throw new HttpParsingException();
         }
+    }
+
+    default WebElement findElement(WebDriver driver, By by) {
+        WebElement element = driver.findElement(by);
+        if (element == null) {
+            throw new ElementNotFoundException();
+        }
+        return element;
     }
 
     private static void doScrollDown(JavascriptExecutor driver, int scrollDownCnt) {

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.kimtaehoondev.jpcollector.config.AdminProperties;
 import org.kimtaehoondev.jpcollector.email.EmailSender;
 import org.kimtaehoondev.jpcollector.email.dto.response.EmailResponseDto;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class EmailSendingServiceImpl implements EmailSendingService {
@@ -39,6 +41,7 @@ public class EmailSendingServiceImpl implements EmailSendingService {
         variables.put("postings", jobPostings);
 
         List<EmailResponseDto> total = emailRepository.findAllBy();
+        log.info("새롭게 등록된 채용공고 {} 건을 구독자 전원({}명)에게 보내줍니다", jobPostings.size(), total.size());
         for (EmailResponseDto emailResponseDto : total) {
             sendEmail(emailResponseDto.getEmail(), title, path, variables);
         }
@@ -46,6 +49,8 @@ public class EmailSendingServiceImpl implements EmailSendingService {
 
     @Override
     public void sendAuthCode(String email, String authCode) {
+        log.info("{}에게 인증코드를 전송합니다", email);
+
         String title = "[채용 정보 크롤러] 인증 코드";
 
         Map<String, Object> variables = new HashMap<>();
