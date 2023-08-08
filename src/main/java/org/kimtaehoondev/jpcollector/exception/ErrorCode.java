@@ -11,7 +11,8 @@ public enum ErrorCode {
     EMAIL_NOT_FOUND(5, "이메일을 찾을 수 없습니다"),
     EMAIL_PASSWORD_INVALID(6,"이메일 비밀번호가 일치하지 않습니다"),
     CODE_INVALID(7,"보내준 코드가 만료되었거나, 일치하지 않습니다"),
-    ELEMENT_NOT_FOUND(8, "해당되는 HTML 요소를 찾지 못했습니다");
+    ELEMENT_NOT_FOUND(8, "해당되는 HTML 요소를 찾지 못했습니다"),
+    THREAD_NOT_WORKING(9, "쓰레드가 정상적으로 작동하지 않았습니다");
 
     private final int code;
     private final String message;
