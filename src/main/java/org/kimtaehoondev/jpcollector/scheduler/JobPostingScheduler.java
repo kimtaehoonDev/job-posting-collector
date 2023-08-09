@@ -9,6 +9,7 @@ import org.kimtaehoondev.jpcollector.jobposting.JobPostingResolver;
 import org.kimtaehoondev.jpcollector.jobposting.dto.response.JobPostingCrawlingResult;
 import org.kimtaehoondev.jpcollector.jobposting.dto.response.JobPostingResponseDto;
 import org.kimtaehoondev.jpcollector.jobposting.service.JobPostingService;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -20,6 +21,7 @@ public class JobPostingScheduler {
     private final JobPostingService jobPostingService;
     private final EmailSendingService emailSendingService;
 
+    @Async
     @Scheduled(cron = "0 30 6 * * ?")
     void executeRegularUpdate() {
         log.info("{}일자 스케쥴러를 실행합니다.", LocalDate.now());
