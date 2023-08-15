@@ -11,7 +11,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.stereotype.Component;
 
-//@Component
+@Component
 public class WantedCommunity implements JobPostingCommunity {
     private JobPostingCommunityType communityType = JobPostingCommunityType.WANTED;
     private Status status = Status.GOOD;
@@ -48,7 +48,7 @@ public class WantedCommunity implements JobPostingCommunity {
 
     private void applyStackFilter(WebDriver driver) throws InterruptedException {
         WebElement filterOpenBtn = driver.findElement(
-            By.cssSelector(".FilterInWdlist_skillsFilterContainer__UZGLH .FilterButton_ButtonClassName__PWHFf button"));
+            By.cssSelector(".FilterInWdlist_skillsFilterContainer__UZGLH .FilterButton_ButtonClassName__PWHFf"));
         filterOpenBtn.click();
 
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(10000));
