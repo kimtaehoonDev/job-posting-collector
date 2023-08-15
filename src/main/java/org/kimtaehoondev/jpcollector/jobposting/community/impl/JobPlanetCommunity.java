@@ -33,10 +33,6 @@ public class JobPlanetCommunity implements JobPostingCommunity {
         this.status = status;
     }
 
-    @Override
-    public boolean isConnected() {
-        return true;
-    }
 
     @Override
     public boolean isStatusBad() {

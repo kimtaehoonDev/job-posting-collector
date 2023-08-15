@@ -24,11 +24,6 @@ public interface JobPostingCommunity {
         return getCommunityType().getUrl().toString();
     }
 
-    // TODO
-    /**
-     * 미리 요청을 보내본 뒤, 서버가 연결가능한지 확인합니다
-     */
-    boolean isConnected();
 
     /**
      * 채용 공고를 확인하기 위한 페이지를 접속합니다.
@@ -53,9 +48,6 @@ public interface JobPostingCommunity {
      * 5. WebElement를 JobPostingData로 변환한 뒤 결과를 반환합니다
      */
     default List<JobPostingData> scrap(WebDriver driver) {
-        if (!isConnected()) {
-            throw new ConnectException(getUrl());
-        }
         try {
             openInternetWindow(driver);
             accessJobPostingPage(driver);

@@ -20,12 +20,6 @@ public class RocketPunchCommunity implements JobPostingCommunity {
     }
 
     @Override
-    public boolean isConnected() {
-        // TODO
-        return true;
-    }
-
-    @Override
     public boolean isStatusBad() {
         return Status.BAD == status;
     }
