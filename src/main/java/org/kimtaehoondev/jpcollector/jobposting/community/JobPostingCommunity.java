@@ -3,7 +3,6 @@ package org.kimtaehoondev.jpcollector.jobposting.community;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.kimtaehoondev.jpcollector.exception.impl.ConnectException;
 import org.kimtaehoondev.jpcollector.exception.impl.ElementNotFoundException;
 import org.kimtaehoondev.jpcollector.exception.impl.ThreadNotWorkingException;
 import org.kimtaehoondev.jpcollector.jobposting.dto.request.JobPostingData;
@@ -13,9 +12,13 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public interface JobPostingCommunity {
-    public static final int WAITING_MILLISECOND = 2000;
+    int WAITING_MILLISECOND = 2000;
+    Logger log = LoggerFactory.getLogger(JobPostingCommunity.class);
+
     JobPostingCommunityType getCommunityType();
 
     void changeStatus(Status status);
@@ -30,7 +33,7 @@ public interface JobPostingCommunity {
      * url만으로 채용 공고 확인이 가능한 경우 구현하지 않습니다.
      */
     default void accessJobPostingPage(WebDriver driver) {
-
+        log.info("{} 커뮤니티는 태그들을 조작하지 않고 넘어갑니다", getCommunityType().name());
     }
 
     /**
@@ -48,17 +51,21 @@ public interface JobPostingCommunity {
      * 5. WebElement를 JobPostingData로 변환한 뒤 결과를 반환합니다
      */
     default List<JobPostingData> scrap(WebDriver driver) {
+        log.info("{} 커뮤니티 스크랩을 시작합니다", getCommunityType().name());
         try {
             openInternetWindow(driver);
             accessJobPostingPage(driver);
             doScrollDown((JavascriptExecutor) driver, 5);
 
             List<WebElement> elements = getJobPostingElements(driver);
-            return elements.stream()
+            List<JobPostingData> postings = elements.stream()
                 .map(this::makeJobPostingFrom)
                 .filter(this::filter)
                 .collect(Collectors.toList());
+            log.info("{} 커뮤니티 스크랩에 성공했습니다", getCommunityType().name());
+            return postings;
         } catch (NoSuchElementException e) {
+            log.error("원소를 찾을 수 없습니다 : {}", e.getMessage());
             throw new ElementNotFoundException();
         }
     }
@@ -111,8 +118,8 @@ public interface JobPostingCommunity {
         return infos;
     }
 
-    // TODO 발생가능 오류. url이 없거나, 접속이 불가능하거나 쓰레드가 오류 생기거나
     default void openInternetWindow(WebDriver driver) {
+        log.info("인터넷 창을 엽니다");
         try {
             String url = getUrl();
             driver.get(url);
@@ -125,6 +132,7 @@ public interface JobPostingCommunity {
 
 
     private static void doScrollDown(JavascriptExecutor driver, int repeatCnt) {
+        log.info("스크롤을 {}회 내립니다", repeatCnt);
         for (int i = 0; i < repeatCnt; i++) {
             try {
                 Thread.sleep(WAITING_MILLISECOND);
@@ -136,6 +144,11 @@ public interface JobPostingCommunity {
             }
         }
     }
+
+    /**
+     * 연산된 결과값에 필터링을 걸어야 하는 경우 사용합니다.
+     * false를 반환하면 해당되는 JobPosting은 결과에 포함되지 않습니다
+     */
 
     default boolean filter(JobPostingData jobPostingData) {
         return true;
