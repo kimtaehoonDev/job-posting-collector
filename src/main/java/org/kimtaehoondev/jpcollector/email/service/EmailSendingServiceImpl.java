@@ -27,6 +27,8 @@ public class EmailSendingServiceImpl implements EmailSendingService {
 
     @Override
     public void sendJobPostings(List<JobPostingResponseDto> jobPostings) {
+        List<EmailResponseDto> total = emailRepository.findAllBy();
+
         String title = LocalDate.now() + "일자 채용 안내 - 김태훈";
         String path = "email/job-posting.html";
 
@@ -39,13 +41,13 @@ public class EmailSendingServiceImpl implements EmailSendingService {
         }
 
         variables.put("postings", jobPostings);
-
-        List<EmailResponseDto> total = emailRepository.findAllBy();
+        String htmlMessage = makeHtml(title, path, variables);
         log.info("새롭게 등록된 채용공고 {} 건을 구독자 전원({}명)에게 보내줍니다", jobPostings.size(), total.size());
         for (EmailResponseDto emailResponseDto : total) {
-            sendEmail(emailResponseDto.getEmail(), title, path, variables);
+            emailSender.sendHtml(emailResponseDto.getEmail(), title, htmlMessage);
         }
     }
+
 
     @Override
     public void sendAuthCode(String email, String authCode) {
@@ -58,16 +60,16 @@ public class EmailSendingServiceImpl implements EmailSendingService {
 
         Context context = new Context(Locale.KOREAN, variables);
         context.setVariable("title", title);
-
-        sendEmail(email, title,
-            "email/auth-code.html", variables);
+        String htmlMessage = makeHtml(title, "email/auth-code.html", variables);
+        emailSender.sendHtml(email, title, htmlMessage);
     }
 
-    private void sendEmail(String email, String title, String templatePath, Map<String, Object> variables) {
+
+    private String makeHtml(String title, String path, Map<String, Object> variables) {
         Context context = new Context(Locale.KOREAN, variables);
         context.setVariable("title", title);
 
-        String message = templateEngine.process(templatePath, context);
-        emailSender.sendHtml(email, title, message);
+        return templateEngine.process(path, context);
     }
+
 }
