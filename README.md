@@ -1,7 +1,7 @@
 # 새로 올라온 채용공고를 구독자들에게 보내주는 서비스
 
 ## 공지
-현재 AWS 비용 폭탄을 맞고 서버를 내렸습니다. 😢<br>
+현재 AWS 비용 폭탄~~13만원~~을 맞고 서버를 내렸습니다. 😢<br>
 채용공고를 받고 싶으시다면 thkimm.dev@gmail.com으로 연락주세요.<br>
 수동으로 크롤링 돌리고 있습니다.<br>
 
@@ -33,4 +33,20 @@ nhn 아카데미를 수료한 뒤, 취업을 희망하는 저와 동기들을 �
 
 ## 개선점
 - 생각보다 채용 공고가 잘 올라오지 않습니다. 사이트들을 더 추가할 필요가 있습니다.
-- 화면의 디자인이 깔끔하지 않습니다. 주로 저와 제 지인들이 사용하는 목적이라 디자인에 크게 의미를 두지 않았습니다. 추후 개선할 계획입니다.
+- 화면의 디자인이 깔끔하지 않습니다. 저와 제 지인들이 사용하는 목적이라 디자인에 크게 의미를 두지 않았습니다. 추후 개선할 계획입니다.
+
+## 시퀀스 다이어그램
+### 인증코드 발송 시나리오
+![image](https://github.com/kimtaehoonDev/job-posting-collector/assets/67636607/c1de1c77-49da-4bca-abea-ddae62cb43e3)
+
+### 인증코드 검증 시나리오
+![image](https://github.com/kimtaehoonDev/job-posting-collector/assets/67636607/1569cbc3-f7f2-4612-be6f-bb18c0fa19f9)
+
+### 구독자 등록 시나리오
+![image](https://github.com/kimtaehoonDev/job-posting-collector/assets/67636607/4f00b7ba-4a80-4e90-82bc-29a4f16a98de)
+
+### 채용공고 전송 시나리오
+![image](https://github.com/kimtaehoonDev/job-posting-collector/assets/67636607/77ea0b28-834e-4894-b1ee-8feac27cee40)
+
+## 아키텍처
+<img width="458" alt="image" src="https://github.com/kimtaehoonDev/job-posting-collector/assets/67636607/33cebd06-3355-4ca7-8310-bad827704b8d">
